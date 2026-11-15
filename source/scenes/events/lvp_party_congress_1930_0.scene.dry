@@ -1,0 +1,68 @@
+title: First <span style="color: #FFCC00;">**LVP**</span> Congress
+subtitle: The future of this new party will be decided here.
+view-if: lvp_trigger_2_time == time
+on-arrival: {! lvp_existence_timer = 0; !}
+max-visits: 1
+tags: event
+face-image: img/weimar_coalition_3.jpg
+new-page: true
+
+= First <span style="color: #FFCC00;">**LVP**</span> Party Congress
+
+The <span style="color: #FFCC00;">Liberal People's Party</span> (<span style="color: #FFCC00;">**LVP**</span>) has officially been founded! Hans Luther, former chancellor and <span style="color: #C0A054;">**DVP**</span> member, has been chosen as the interim leader of the new party.
+
+The <span style="color: #FFCC00;">**LVP**</span>'s inaugural congress will play a major role in shaping the direction of the newly founded party, and most importantly, decide who will lead the liberal movement forward. [? if lvp_ideology == "Right": Disappointingly, the right-wing shift of the predecessor parties has impacted this party as well. ?]
+
+- @luther: The party votes...
+
+@luther
+call: lvp_formed
+on-arrival: {! lvp_relation += 5; lvp_left += 3; !}
+face-image: img/portraits/luther.jpg
+
+Hans Luther is chosen to lead the <span style="color: #FFCC00;">**LVP**</span>, a long-time advocate for liberal and bourgeois unity, and a figure acceptable to both wings of the newly unified party. His influence among the German business community undoubtedly is what secured him the selection, it's hard to imagine the mixture of the dissenting factions of both predecessor parties being able to choose a single candidate.
+
+Meanwhile, the skeptics on the extremes of the party, despite their initial resistance to the merger, is now focusing on shifting the <span style="color: #FFCC00;">**LVP**</span> further towards one end of the political spectrum. The <span style="color: #C0A054;">**DVP**</span> right will leverage the highly influential support of the party's industrial backers, while the <span style="color: #D3C24D;">**[+ ddp_name +]**</span> left will attempt to lobby for policy that benefits the working class with their supporters in the labor unions.
+
+- @lvp_weimar
+- @lvp_groko
+
+@lvp_weimar
+title: Renegotiate the ruling coalition.
+view-if: in_weimar_coalition and not in_social_catholic_coalition and spd_in_government
+on-arrival: {! leverage = spd_r; if (z_ideology == "Left") { leverage += 5; } if (lvp_formed) { foreign_minister_party = "LVP"; } else { foreign_minister_party = "DVP"; } interior_minister_party = "Z"; justice_minister_party = "I"; labor_minister_party = "Z"; reichswehr_minister_party = "I"; if (lvp_formed) { economic_minister_party = "LVP"; } else { economic_minister_party = ddp_name; } if (lvp_formed) { finance_minister_party = "LVP"; } else { finance_minister_party = "DVP"; } agriculture_minister_party = "Z"; !}
+
+As a result of the nominally left-liberal <span style="color: #D3C24D;">**[+ ddp_name +]**</span> and conservative-liberal <span style="color: #C0A054;">**DVP**</span> having merged, they demand that their members that were formerly apart of the <span style="color: #C0A054;">**DVP**</span> to be included in the government. We will have to reshuffle the cabinet.
+
+- @election_1928.ministries: Shuffle the cabinet.
+
+@lvp_groko
+title: Renegotiate the ruling coalition.
+view-if: in_grand_coalition and spd_in_government
+
+As a result of the left-liberal <span style="color: #D3C24D;">**[+ ddp_name +]**</span> and conservative-liberal <span style="color: #C0A054;">**DVP**</span> having merged, we could go ahead with kicking the small <span style="color: #A2D8E0;">**BVP**</span> out of government. This will leave us with a majority <span style="color: #000000;">We</span><span style="color: #DD0000;">im</span><span style="color: #FFCC00;">ar</span> Coalition.
+
+- @weimar: Form a <span style="color: #000000;">We</span><span style="color: #DD0000;">im</span><span style="color: #FFCC00;">ar</span> Coalition.
+- @groko: Maintain the Grand Coalition.
+
+@weimar
+on-arrival: {! lvp_relation -= 4; z_relation -= 3; lvp_right += 1; in_weimar_coalition = 1; in_grand_coalition = 0; coalition_dissent += 1; Q.coalition_type = 'weimarer'; !}
+
+call: update_faction_strengths
+
+go-to: cabinet_reformation
+
+An expected move, but the bourgeois parties are displeased by the exclusion of the <span style="color: #A2D8E0;">**BVP**</span> from the ruling coalition.
+
+@groko
+subtitle: The <span style="color: #FFCC00;">**LVP**</span> will be pleased.
+on-arrival: {! lvp_relation += 3; z_relation += 3; lvp_left += 1; Q.coalition_type = 'groko'; !}
+
+call: update_faction_strengths
+
+go-to: cabinet_reformation
+
+The bourgeois parties are pleased and somewhat surprised by this move.
+
+@cabinet_reformation
+on-arrival: {! if (labor_minister_party !== "SPD") { labor_minister_party = "Z"; } if (labor_minister !== "Wissell") { labor_minister = "Stegerwald"; } if (labor_minister_party !== "SPD" && in_social_liberal_coalition) { labor_minister_party = ddp_name; } if (labor_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { labor_minister_party = "LVP"; } if (labor_minister !== "Wissell" && in_social_liberal_coalition) { labor_minister = "Lemmer"; } if (interior_minister_party !== "SPD") { interior_minister_party = "Z"; } if (interior_minister !== "Severing") { interior_minister = "Wirth"; } if (interior_minister_party !== "SPD" && in_social_liberal_coalition) { interior_minister_party = ddp_name; } if (interior_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { interior_minister_party = "LVP"; } if (interior_minister !== "Severing" && in_social_liberal_coalition) { interior_minister = "Külz"; } if (finance_minister_party !== "SPD" && in_grand_coalition && !lvp_formed) { finance_minister_party = "DVP"; } else if (finance_minister_party !== "SPD" && (in_grand_coalition || in_weimar_coalition) && lvp_formed) { finance_minister_party = "LVP"; } if (finance_minister !== "Hilferding" && in_grand_coalition) { finance_minister = "Moldenhauer"; } if (finance_minister_party !== "SPD" && (in_weimar_coalition && !lvp_formed || in_popular_front || in_social_catholic_coalition)) { finance_minister_party = "Z"; } if (finance_minister !== "Hilferding" && (in_weimar_coalition && !lvp_formed || in_popular_front || in_social_catholic_coalition)) { finance_minister = "Köhler"; } if (finance_minister_party !== "SPD" && in_social_liberal_coalition) { finance_minister_party = ddp_name; } if (finance_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { finance_minister_party = "LVP"; } if (finance_minister !== "Hilferding" && in_social_liberal_coalition) { finance_minister = "Reinhold"; } if (finance_minister !== "Hilferding" && in_social_liberal_coalition && lvp_formed) { finance_minister = "Moldenhauer"; } if (economic_minister_party !== "SPD" && in_grand_coalition && !lvp_formed) { economic_minister_party = "DVP"; } else if (economic_minister_party !== "SPD" && (in_grand_coalition || in_weimar_coalition) && lvp_formed) { economic_minister_party = "LVP"; } if (economic_minister !== "Schmidt" && in_grand_coalition) { economic_minister = "Curtius"; } if (economic_minister_party !== "SPD" && (in_weimar_coalition && !lvp_formed || (in_popular_front && liberal_parliament === 0 && bourgeois_parliament_ddp == 0 && !lvp_formed))) { economic_minister_party = ddp_name; } if (economic_minister_party !== "SPD" && (in_weimar_coalition && lvp_formed || (in_popular_front && liberal_parliament === 0 && lvp_formed))) { economic_minister_party = "LVP"; } if (economic_minister !== "Schmidt" && (in_weimar_coalition || (in_popular_front && liberal_parliament === 0 && bourgeois_parliament_ddp == 0 && !lvp_formed))) { economic_minister = "Dietrich"; } if (economic_minister_party !== "SPD" && in_social_liberal_coalition) { economic_minister_party = ddp_name; } if (economic_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { economic_minister_party = "LVP"; } if (economic_minister !== "Schmidt" && in_social_liberal_coalition) { economic_minister = "Trendelenburg"; } if (economic_minister !== "Schmidt" && in_social_liberal_coalition && lvp_formed) { economic_minister = "Curtius"; } if (economic_minister_party !== "SPD" && (in_social_catholic_coalition || (in_popular_front && (liberal_parliament === 1 || bourgeois_parliament_ddp == 1 || lvp_formed)))) { economic_minister_party = "Z"; } if (economic_minister !== "Schmidt" && (in_social_catholic_coalition || (in_popular_front && (liberal_parliament === 1 || bourgeois_parliament_ddp == 1 || lvp_formed)))) { economic_minister = "Brüning"; } if (justice_minister_party !== "SPD" && !lvp_formed) { justice_minister_party = ddp_name; } else if (justice_minister_party !== "SPD" && lvp_formed) { justice_minister_party = "LVP"; } if (justice_minister !== "Radbruch") { justice_minister = "Koch-Weser"; } if (justice_minister_party !== "SPD" && (in_popular_front && (liberal_parliament === 1 || bourgeois_parliament_ddp == 1 || lvp_formed) || in_social_catholic_coalition)) { justice_minister_party = "Z"; } if (justice_minister !== "Radbruch" && (in_popular_front && (liberal_parliament === 1 || bourgeois_parliament_ddp == 1 || lvp_formed) || in_social_catholic_coalition)) { justice_minister = "Guérard"; } if (justice_minister_party !== "SPD" && in_social_liberal_coalition) { justice_minister_party = ddp_name; } if (justice_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { justice_minister_party = "LVP"; } if (justice_minister !== "Radbruch" && in_social_liberal_coalition) { justice_minister = "Koch-Weser"; } if (foreign_minister_party !== "SPD" && !lvp_formed) { foreign_minister_party = "DVP"; } else if (foreign_minister_party !== "SPD" && lvp_formed) { foreign_minister_party = "LVP"; } if (foreign_minister !== "Breitscheid") { foreign_minister = "Stresemann"; } if (foreign_minister !== "Breitscheid" && stresemann_dead === 1) { foreign_minister = "Curtius"; } if (foreign_minister_party !== "SPD" && (in_weimar_coalition && !lvp_formed || in_popular_front || in_social_catholic_coalition)) { foreign_minister_party = "Z"; } if (foreign_minister_party !== "SPD" && (in_weimar_coalition && lvp_formed)) { foreign_minister_party = "LVP"; } if (foreign_minister !== "Breitscheid" && (in_weimar_coalition && !lvp_formed || in_popular_front || in_social_catholic_coalition)) { foreign_minister = "Wirth"; } if (foreign_minister_party !== "SPD" && in_social_liberal_coalition) { foreign_minister_party = ddp_name; } if (foreign_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { foreign_minister_party = "LVP"; } if (foreign_minister !== "Breitscheid" && in_social_liberal_coalition) { foreign_minister = "Prittwitz"; } if (agriculture_minister_party !== "SPD" && !lvp_formed) { agriculture_minister_party = ddp_name; } else if (agriculture_minister_party !== "SPD" && lvp_formed) { agriculture_minister_party = "LVP"; } if (agriculture_minister !== "Baade") { agriculture_minister = "Dietrich"; } if (agriculture_minister_party !== "SPD" && (in_weimar_coalition && !lvp_formed || in_popular_front || in_social_catholic_coalition)) { agriculture_minister_party = "Z"; } if (agriculture_minister !== "Baade" && (in_weimar_coalition && !lvp_formed || in_popular_front || in_social_catholic_coalition)) { agriculture_minister = "Hermes"; } if (agriculture_minister_party !== "SPD" && in_social_liberal_coalition) { agriculture_minister_party = ddp_name; } if (agriculture_minister_party !== "SPD" && in_social_liberal_coalition && lvp_formed) { agriculture_minister_party = "LVP"; } if (agriculture_minister !== "Baade" && in_social_liberal_coalition) { agriculture_minister = "Dietrich"; } if (reichswehr_minister_party !== "SPD") { reichswehr_minister_party = "I"; } if (reichswehr_minister !== "Leber") { reichswehr_minister = "Groener"; } !}

@@ -1,0 +1,7 @@
+# BVP Integration Level
+
+(0..0) <span style="color: #808080;">Separate</span>
+(1..1) <span style="color: #A0A050;">Aligned</span>
+(2..2) <span style="color: #C0C060;">Associated</span>
+(3..3) <span style="color: #E0E070;">Enmeshed</span>
+(4..4) <span style="color: #FFFF80;">Unified</span>

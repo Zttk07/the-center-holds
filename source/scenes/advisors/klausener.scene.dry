@@ -1,0 +1,40 @@
+title: Fritz Klausener
+new-page: true
+view-if: bvp_integration >= 1 and anti_fascist_available and (not klausener_recruited or klausener_recruited == 1)
+tags: advisor
+choose-if: advisor_action_timer <= 0 and (not klausener_recruited or klausener_recruited == 1)
+unavailable-subtitle: [? if advisor_action_timer > 0: [+ advisor_action_timer +] months until next advisor action. ?][? if bvp_integration < 1: Requires BVP Integration: Aligned (Level 1). ?][? if not anti_fascist_available: Anti-Fascist faction not unlocked. ?][? if klausener_recruited > 1: Already used this month. ?]
+card-image: img/portraits/KlausenerFritz.jpg
+on-arrival: {!
+if (!Q.klausener_recruited) {
+    Q.klausener_recruited = 1;
+    Q.anti_fascist_strength += 7;
+    Q.anti_fascist_dissent -= 4;
+    Q.left_strength += 2;
+    Q.left_dissent -= 3;
+    Q.presidential_opinion -= 3;
+    if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+    Q.bvp_relations -= 4;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.klausener_result = "Fritz Klausener, Catholic youth leader and secretary of the Katholische Arbeitnehmer-Bewegung (KAB), joins as Anti-Fascist advisor. His mobilization of Catholic youth against Nazism strengthens the democratic wing. Anti-Fascist Strength +7, Anti-Fascist Dissent -4, Left Strength +2, Left Dissent -3, Presidential Opinion -3, BVP Relations -4. Klausener is uncompromising: 'The Gospel and the swastika are incompatible. Any Catholic who says otherwise betrays both.'";
+} else {
+    Q.advisor_action_timer = 6;
+    Q.klausener_recruited = 2;
+    Q.anti_fascist_strength += 1;
+    Q.anti_fascist_dissent -= 2;
+    Q.left_dissent -= 1;
+    Q.presidential_opinion -= 1;
+    if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+    Q.anti_fascist_actions_this_month += 1;
+    Q.klausener_result = "Klausener directs KAB youth groups in street-level anti-Nazi organizing. Their visible resistance changes the political atmosphere in Catholic regions. Anti-Fascist Strength +1, Anti-Fascist Dissent -2, Left Dissent -1, Presidential Opinion -1. 'Our youth will not march for Hitler. They will march for human dignity.'";
+}
+!}
+go-to: klausener_event
+
+@klausener_event
+title: Klausener Consultation
+new-page: true
+
+{! Q.klausener_result !}
+
+- @z_advisors_hub: Return to Advisors

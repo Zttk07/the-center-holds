@@ -1,0 +1,76 @@
+title: BVP Integration
+new-page: true
+tags: party_affairs
+view-if: party_affairs_timer <= 0 and bvp_integration < 4
+on-arrival: month_actions += 1; party_affairs_timer = 4;
+
+= BVP Integration
+
+Current Integration Level: [+ bvp_integration +] ([? if bvp_integration == 0: <span style="color:#808080;">Separate</span> ?][? if bvp_integration == 1: <span style="color:#A0A050;">Aligned</span> ?][? if bvp_integration == 2: <span style="color:#C0C060;">Associated</span> ?][? if bvp_integration == 3: <span style="color:#E0E070;">Enmeshed</span> ?][? if bvp_integration == 4: <span style="color:#FFFF80;">Unified</span> ?])
+Current Relations: [+ bvp_relations +]/100
+[? if z_in_government != 1 and out_of_government_malus > 0: <span style="color:#8B0000;">Out-of-Government Malus: [+ out_of_government_malus +] (impairs integration efforts)</span> ?]
+
+Integration Effects:
+[? if bvp_integration >= 1: <span style="color:#008000;">✓</span> BVP more willing to join coalitions ?]
+[? if bvp_integration >= 2: <span style="color:#008000;">✓</span> Heinrich Held available as advisor ?]
+[? if bvp_integration >= 3: <span style="color:#008000;">✓</span> Fritz Schäffer available as advisor ?]
+[? if bvp_integration >= 4: <span style="color:#008000;">✓</span> Gustav Ritter von Kahr available as advisor; Total Bavarian control; BVP guaranteed to join any government ?]
+[? if bvp_integration >= 1: <span style="color:#008000;">✓</span> Anti-Fascist leaders Moenius & Hundhammer unlockable ?]
+
+Stickiness: Separate→Aligned and Enmeshed→Unified require more investment.
+
+- @invest_integration: Invest in Integration ([+ integration_cost +] resources)
+- @z_party_hub: Return to Party Affairs
+- @easy_discard
+
+@invest_integration
+title: Deepen BVP Integration
+subtitle: Spend political capital to bind the BVP closer to the Zentrum.
+choose-if: resources >= integration_cost
+unavailable-subtitle: [? if resources < integration_cost: Need [+ integration_cost +] resources. ?][? if bvp_relations < relation_threshold: BVP Relations too low ([+ bvp_relations +]/100, need [+ relation_threshold +]). ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs BVP integration</span> ?]
+on-arrival: {!
+// Calculate integration cost based on current level (stickiness: Separate→Aligned and Enmeshed→Unified cost more)
+if (Q.bvp_integration == 0) Q.integration_cost = 3;      // Separate → Aligned
+else if (Q.bvp_integration == 1) Q.integration_cost = 2;  // Aligned → Associated
+else if (Q.bvp_integration == 2) Q.integration_cost = 2;  // Associated → Enmeshed
+else if (Q.bvp_integration == 3) Q.integration_cost = 3;  // Enmeshed → Unified
+
+// Relation threshold increases with integration level
+if (Q.bvp_integration == 0) Q.relation_threshold = 30;   // Separate → Aligned
+else if (Q.bvp_integration == 1) Q.relation_threshold = 40; // Aligned → Associated
+else if (Q.bvp_integration == 2) Q.relation_threshold = 50; // Associated → Enmeshed
+else if (Q.bvp_integration == 3) Q.relation_threshold = 60; // Enmeshed → Unified
+
+// Malus penalty: increases cost and threshold
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+    Q.integration_cost += malus_penalty;
+    Q.relation_threshold += malus_penalty * 5;
+}
+
+Q.resources -= Q.integration_cost;
+Q.bvp_integration += 1;
+if (Q.bvp_integration > 4) Q.bvp_integration = 4;
+!}
+go-to: z_bvp_integration_result
+
+@z_bvp_integration_result
+title: Integration Progress
+new-page: true
+on-arrival: {!
+var messages = [
+    "The BVP agrees to coordinate more closely on Reichstag votes. Integration advances to Aligned.",
+    "Joint policy working groups are established. The BVP becomes Associated with the Zentrum.",
+    "Deep institutional links form. The BVP is now Enmeshed with the Zentrum.",
+    "The BVP and Zentrum operate as a single political force in Bavaria. Unified integration achieved."
+];
+Q.z_bvp_int_text = messages[Q.bvp_integration - 1] || "Integration updated.";
+!}
+
+{! Q.z_bvp_int_text !}
+
+New Integration Level: [+ bvp_integration +] ([? if bvp_integration == 0: Separate ?][? if bvp_integration == 1: Aligned ?][? if bvp_integration == 2: Associated ?][? if bvp_integration == 3: Enmeshed ?][? if bvp_integration == 4: Unified ?])
+
+- @z_bvp_integration: Continue Integration Efforts
+- @z_party_hub: Return to Party Affairs

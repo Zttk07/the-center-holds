@@ -1,0 +1,7 @@
+# Left Faction Strength
+
+(0..5) <span style="color:#7A1C1C;">negligible</span>
+(6..15) <span style="color:#A03030;">weak</span>
+(16..30) <span style="color:#C04040;">moderate</span>
+(31..50) <span style="color:#D86060;">strong</span>
+(51..100) <span style="color:#E88080;">dominant</span>

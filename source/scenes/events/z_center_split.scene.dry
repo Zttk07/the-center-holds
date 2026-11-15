@@ -1,0 +1,63 @@
+title: Center Faction Splits
+new-page: true
+subtitle: The Center faction's disagreements with party policy have grown too severe.
+tags: event
+view-if: center_dissent >= 60 and not center_leaders_resigned and z_center_split_timer = 0
+on-arrival: {!
+Q.center_leaders_resigned = 1;
+Q.z_center_split_timer = 4;
+
+if (Q.center_strength < 10) {
+    Q.workers_z -= 3;
+    Q.new_middle_z -= 2;
+    Q.rb_strength -= 150;
+} else if (Q.center_strength < 25) {
+    Q.workers_z -= 4;
+    Q.new_middle_z -= 3;
+    Q.old_middle_z -= 2;
+    Q.rb_strength -= 250;
+} else if (Q.center_strength < 40) {
+    Q.workers_z -= 5;
+    Q.new_middle_z -= 4;
+    Q.old_middle_z -= 3;
+    Q.rural_z -= 2;
+    Q.rb_strength -= 350;
+} else if (Q.center_strength < 60) {
+    Q.workers_z -= 6;
+    Q.new_middle_z -= 6;
+    Q.old_middle_z -= 4;
+    Q.rural_z -= 3;
+    Q.rb_strength -= 450;
+} else {
+    Q.workers_z -= 8;
+    Q.new_middle_z -= 8;
+    Q.old_middle_z -= 6;
+    Q.rural_z -= 4;
+    Q.unemployed_z -= 2;
+    Q.rb_strength -= 600;
+}
+
+Q.z_relation -= 5;
+Q.ddp_relation -= 3;
+Q.dvp_relation -= 3;
+Q.bvp_relations -= 10;
+if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+
+Q.center_strength = Q.center_strength * 0.3;
+
+Q.n_advisors_start = Q.n_advisors;
+if (Q.guérard_advisor == 1) Q.n_advisors -= 1;
+Q.guérard_advisor = 0;
+if (Q.hermes_advisor == 1) Q.n_advisors -= 1;
+Q.hermes_advisor = 0;
+if (Q.bell_advisor == 1) Q.n_advisors -= 1;
+Q.bell_advisor = 0;
+if (Q.n_advisors < Q.n_advisors_start) Q.shuffle_leadership_timer = 0;
+!}
+max-visits: 1
+
+= Center Faction leaders resign
+
+Our policy choices have greatly offended the Center faction. Many of our most experienced parliamentary leaders have resigned, citing the party's drift from the constitutional center. They form a loose <span style="color: #D3C24D;">**Constitutional Catholic Association**</span> — not a full party, but a pressure group that will contest our claim to represent the moderate Catholic electorate.
+
+The BVP views this split with alarm, fearing it undermines the Catholic center's unity.

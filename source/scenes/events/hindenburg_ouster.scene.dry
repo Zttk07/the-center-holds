@@ -1,0 +1,76 @@
+title: Hindenburg Ouster
+new-page: true
+tags: event
+view-if: president == "Hindenburg" and presidential_opinion <= 15
+on-arrival: {!
+Q.hindenburg_ouster_text = "";
+Q.hindenburg_ousted = 1;
+
+// Determine succession per spec §5.3
+if (Q.papen_recruited == 0) {
+    // Papen not recruited → Papen cabinet
+    Q.chancellor_party = "DNVP";
+    Q.chancellor = "Papen";
+    Q.minority_government = 1;
+    Q.presidential_cabinet = 1;
+    Q.papen_cabinet = 1;
+    Q.hindenburg_ouster_text = "President Hindenburg, his patience exhausted, dismisses the government. He appoints Franz von Papen as Chancellor of a presidential cabinet. The Zentrum is shut out of power. The Reichstag is dissolved. New elections loom under Article 48.";
+} else if (Q.schleicher_recruited == 0) {
+    // Papen recruited, Schleicher not → Schleicher cabinet
+    Q.chancellor_party = "DNVP";
+    Q.chancellor = "Schleicher";
+    Q.minority_government = 1;
+    Q.presidential_cabinet = 1;
+    Q.schleicher_cabinet = 1;
+    Q.hindenburg_ouster_text = "President Hindenburg, his patience exhausted, dismisses the government. He appoints Kurt von Schleicher as Chancellor of a presidential cabinet. The General's 'Querfront' strategy begins. The Zentrum is shut out of power. The Reichstag is dissolved.";
+} else if (Q.year < 1932 || (Q.year == 1932 && Q.month < 7)) {
+    // Both recruited pre-1932 → DNVP presidential cabinet
+    Q.chancellor_party = "DNVP";
+    Q.chancellor = "Hugenberg";
+    Q.minority_government = 1;
+    Q.presidential_cabinet = 1;
+    Q.hindenburg_ouster_text = "President Hindenburg, his patience exhausted, dismisses the government. With Papen and Schleicher both compromised in his eyes, he turns to the DNVP. Alfred Hugenberg becomes Chancellor of a presidential cabinet. The nationalist right takes the reins. The Zentrum is shut out of power.";
+} else {
+    // Both recruited post-1932 → NSDAP presidential cabinet
+    Q.chancellor_party = "NSDAP";
+    Q.chancellor = "Hitler";
+    Q.minority_government = 1;
+    Q.presidential_cabinet = 1;
+    Q.hitler_cabinet = 1;
+    Q.hindenburg_ouster_text = "President Hindenburg, his patience exhausted, dismisses the government. With Papen and Schleicher both compromised, and the crisis deepening, he makes the fateful choice. Adolf Hitler becomes Chancellor of a presidential cabinet. The NSDAP takes power. The Zentrum is shut out. The Republic's final hour has struck.";
+}
+
+// Coalition dissolved
+Q.coalition_type = 'none';
+Q.z_in_government = 0;
+Q.out_of_government_malus = 20; // Immediate heavy malus
+
+// Faction impacts
+Q.barons_strength += 10;
+Q.barons_dissent -= 5;
+Q.right_strength += 5;
+Q.right_dissent -= 3;
+Q.left_strength -= 5;
+Q.left_dissent += 10;
+Q.anti_fascist_strength -= 3;
+Q.anti_fascist_dissent += 10;
+Q.center_dissent += 5;
+
+// BVP relations hit
+Q.bvp_relations -= 15;
+if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+
+// Presidential opinion resets for new Chancellor
+Q.presidential_opinion = 50;
+!}
+max-visits: 1
+
+= Hindenburg Ousts the Government
+
+{! Q.hindenburg_ouster_text !}
+
+**Presidential Opinion was:** [+ presidential_opinion +] (Very Poor)
+**New Chancellor:** [+ chancellor +] ([+ chancellor_party +])
+
+- @z_party_hub: Return to Party Affairs (Out of Government)
+- @z_govt_hub: Government Affairs (if recalled)

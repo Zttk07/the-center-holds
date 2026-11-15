@@ -1,0 +1,7 @@
+# Center Faction Strength
+
+(0..5) <span style="color:#555555;">negligible</span>
+(6..15) <span style="color:#777777;">weak</span>
+(16..30) <span style="color:#999999;">moderate</span>
+(31..50) <span style="color:#BBBBBB;">strong</span>
+(51..100) <span style="color:#DDDDDD;">dominant</span>

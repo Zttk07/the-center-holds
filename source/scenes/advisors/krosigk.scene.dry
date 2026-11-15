@@ -1,0 +1,36 @@
+title: Lutz Graf Schwerin von Krosigk
+new-page: true
+view-if: not krosigk_recruited or krosigk_recruited == 1
+tags: advisor
+choose-if: advisor_action_timer <= 0
+unavailable-subtitle: [? if advisor_action_timer > 0: [+ advisor_action_timer +] months until next advisor action. ?][? if krosigk_recruited > 1: Already used this month. ?]
+card-image: img/portraits/KrosigkLutz.jpg
+on-arrival: {!
+if (!Q.krosigk_recruited) {
+    Q.krosigk_recruited = 1;
+    Q.barons_strength += 8;
+    Q.barons_dissent -= 3;
+    Q.budget += 1;
+    Q.moderate_plan_support += 5;
+    Q.center_strength += 2;
+    Q.center_dissent -= 2;
+    Q.right_strength += 1;
+    Q.z_krosigk_result = "Count Krosigk accepts a portfolio. The consummate bureaucrat brings fiscal discipline and administrative competence. The Barons faction gains a technocratic wing. Barons strength +8, Barons dissent -3, Budget +1, Moderate Plan Support +5, Center Strength +2, Center Dissent -2, Right Strength +1. Krosigk adjusts his pince-nez. 'A balanced budget is the foundation of state authority, Minister.'";
+} else {
+    Q.advisor_action_timer = 6;
+    Q.krosigk_recruited = 2;
+    Q.budget += 1;
+    Q.moderate_plan_support += 3;
+    Q.center_dissent -= 1;
+    Q.z_krosigk_result = "Krosigk presents fiscal options. His mastery of the budgetary process is unmatched. Budget +1, Moderate Plan Support +3, Center Dissent -1. 'Deficits are the opium of politicians,' Krosigk intones. 'We shall not indulge.'";
+}
+!}
+go-to: z_krosigk_event
+
+@z_krosigk_event
+title: Krosigk Consultation
+new-page: true
+
+{! Q.z_krosigk_result !}
+
+- @z_advisors_hub: Return to Advisors

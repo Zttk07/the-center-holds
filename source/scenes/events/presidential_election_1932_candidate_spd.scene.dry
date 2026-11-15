@@ -1,0 +1,36 @@
+title: Presidential Election 1932 - SPD Candidate Selection
+subtitle: The DVP refuses to support Eckener.
+view-if: player_party == 'spd'
+new-page: true
+tags: event
+priority: 1
+max-visits: 1
+
+@convince_dvp_fail_eckener
+on-arrival: dvp_support_spd = 0; dvp_right += 1; dvp_relation -= 3
+go-to: endorsements_eckener
+
+Unfortunately, under the influence of their industrialist wing, the <span style="color: #C0A054;">**DVP**</span> has rejected our overtures and will continue on their own path.
+
+@endorsements_eckener
+title: The <span style="color: #C0A054;">**DVP**</span> refuses to support Eckener.
+subtitle: Their industrial wing blocks any cooperation with us.
+on-arrival: dvp_support_spd = 0; dvp_right += 1; dvp_relation -= 3
+
+The <span style="color: #C0A054;">**DVP**</span> leadership has formally declined to endorse Hugo Eckener, citing his "insufficient commitment to the national cause." This rejection effectively forces the DVP to either run their own candidate or fall in line behind Hindenburg.
+
+- @convince_dvp_fail_eckener: Proceed with our own candidate.
+- @support_hindenburg: Support Hindenburg instead.
+
+@candidate_selection
+title: Choose our presidential strategy.
+
+We must decide how the SPD will engage in the 1932 presidential election. Our choice will define the party's trajectory for years to come.
+
+[? if hindenburg_run: - @support_hindenburg: Support President Hindenburg's re-election. ?]
+[? if not hindenburg_run and reactionary_candidate_1932 and reactionary_candidate_1932 != "Westarp" and reactionary_candidate_1932 != "Lettow-Vorbeck": - @support_reactionary: Support [+ reactionary_candidate_1932_disp +] as the moderate right candidate. ?]
+[? if not hindenburg_run and secondary_reactionary_candidate_1932 and secondary_reactionary_candidate_1932 != "Westarp" and secondary_reactionary_candidate_1932 != "Lettow-Vorbeck": - @support_reactionary_2: Support [+ secondary_reactionary_candidate_1932_disp +] as an alternative moderate right candidate. ?]
+- @support_spd: Support the <span style="color: #c00000;">**SPD**</span> candidate ([+ spd_candidate_1932_disp +]).
+[? if kpd_relation >= 50 and not schleicher_spd: - @support_thalmann: Support the <span style="color: #700000;">**KPD**</span> candidate ([+ communist_candidate_1932_disp +]). ?]
+- @run_spd_candidate: Run our own candidate ([+ spd_candidate_1932_disp +]).
+- @abstain: Abstain from endorsing any candidate.

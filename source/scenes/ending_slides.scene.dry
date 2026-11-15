@@ -1,0 +1,103 @@
+const elements = document.querySelectorAll('header, #content, footer');
+elements.forEach(el => {
+  el.style.maxWidth = '540px';
+});
+!}
+set-bg: img/map_2.jpg
+go-to: game_over.eg_menu
+
+@go_back_2
+title: Go back.
+view-if: not (pro_republic < 50 and spd_votes < 25 and z_ideology == "Right" and z_relation < 35 and dnvp_ideology == "Radical")
+on-arrival: {!
+const toolsWrapper = document.getElementById('tools_wrapper');
+if (toolsWrapper) {
+  toolsWrapper.style.display = 'block';
+}
+const elements = document.querySelectorAll('header, #content, footer');
+elements.forEach(el => {
+  el.style.maxWidth = '540px';
+});
+!}
+set-bg: img/map_2.jpg
+go-to: game_over.eg_menu
+
+@marx_president_win
+title: A Republic United
+subtitle: Ending 9
+view-if: president == "Marx" and not civil_war_seen and not nsdap_win and not dnef_win and not hammerstein_win and not monarchy_win and not papen_win and not left_win
+new-page: true
+
+With the election of Wilhelm Marx as President, the Weimar Republic gains a steady hand at the helm. The former Chancellor and Center Party leader brings decades of parliamentary experience and a commitment to constitutional democracy. His presidency marks the first time a Catholic politician from the Center Party has held the highest office, symbolizing the full integration of political Catholicism into the Republic.
+
+Marx uses his office to mediate between the Republic's fractious parties. He refuses to appoint anti-democratic cabinets, instead leveraging his authority to keep governments accountable to the Reichstag. The "Marx Constitution" — a series of presidential decrees and negotiated amendments — strengthens parliamentary control over emergency powers while preserving the President's role as guardian of the constitution.
+
+The Nazi movement, deprived of the presidential platform Hindenburg provided, fractures into competing factions. Without the aura of legitimacy that came with the aging field marshal's backing, the NSDAP cannot bridge its internal divides. By 1935, the party has splintered into a radical rump under Hitler and a "national socialist" bloc that enters conventional politics, only to fade into irrelevance.
+
+Germany weathers the Great Depression through a combination of targeted public works, expanded unemployment insurance, and the 1933 London Economic Conference agreements that Marx helped broker. The Republic emerges from the crisis battered but intact, its democratic institutions proven resilient.
+
+In 1939, as tensions rise in Europe, President Marx's diplomatic efforts help coordinate a collective security arrangement between France, Britain, Czechoslovakia, and Poland. The "Geneva System" contains German revisionism without war. Austria holds a free referendum on Anschluss in 1938, voting to maintain independence under SDAPÖ leadership.
+
+Today, Germany is a stable parliamentary democracy. The Center Party, SPD, and liberals rotate in government, while the Reichswehr remains firmly under civilian control. The presidency, once a "replacement Kaiser," has become a truly republican office. Marx's portrait hangs in every government building alongside Ebert's — the two architects of a democracy that survived its greatest test.
+
+- @go_back
+
+@stegerwald_president_win
+title: The Christian Republic
+subtitle: Ending 10
+view-if: president == "Stegerwald" and not civil_war_seen and not nsdap_win and not dnef_win and not hammerstein_win and not monarchy_win and not papen_win and not left_win
+new-page: true
+
+Adam Stegerwald's election as President represents the triumph of Christian trade unionism and the "interconfessional" strategy he championed. A Protestant leading the Catholic Center Party, Stegerwald embodies his vision of a Christian People's Party transcending denominational lines. His presidency reshapes German politics along religious rather than class lines.
+
+Stgerwald governs through a "Christian-social" consensus. He brokers the 1933 Concordat with the Vatican, guaranteeing Catholic rights while affirming the Republic's sovereignty. His "Labor Charter" writes collective bargaining, works councils, and social insurance into constitutional law — achievements the SPD had sought for decades. The free trade unions, initially wary, become pillars of the new order.
+
+The Nazis are outflanked on their own terrain. Stegerwald's "Christian nationalism" appropriates the patriotic imagery Hitler once monopolized, but redirects it toward European reconciliation and social justice. The SA's street violence meets organized resistance from the Reichsbanner and Christian worker militias, coordinated by a Interior Ministry no longer sympathetic to the right.
+
+Economically, Stegerwald steers a corporatist course: industry is organized into mandatory "estates" with worker representation, credit is directed toward housing and infrastructure, and the mark is stabilized through capital controls. Unemployment falls steadily. By 1936, Germany has the strongest social welfare system in Europe.
+
+Internationally, President Stegerwald pursues a "Christian concert of nations." He mediates the Saar referendum (1935), which votes to return to Germany under League supervision. He supports Austrian independence against both Nazi and Habsburg restoration. When Italy invades Ethiopia, Germany joins sanctions — alienating Mussolini but winning British and French trust.
+
+Today, Germany is a "Christian Democratic Republic." The CVP (formed from the Center Party's merger with Protestant allies) dominates the center-right. The SPD, pushed leftward, governs in occasional "Red-Christian" coalitions. The presidency rotates between CVP and SPD leaders. The Reichswehr is professional and apolitical. Stegerwald's legacy — a democracy rooted in Christian social teaching — endures as the Republic's founding myth.
+
+- @go_back
+
+@kaas_president_win
+title: The Diplomat's Republic
+subtitle: Ending 11
+view-if: president == "Kaas" and not civil_war_seen and not nsdap_win and not dnef_win and not hammerstein_win and not monarchy_win and not papen_win and not left_win
+new-page: true
+
+Ludwig Kaas, the priest-politician and Center Party chairman, brings a scholar's precision and a cleric's moral authority to the presidency. His election — narrow, decided by a coalition of Center, BVP, DDP, and tolerating SPD votes — reflects a Republic still deeply divided but unwilling to surrender to extremism.
+
+Kaas governs through quiet diplomacy. He refuses to use Article 48 except in genuine emergencies, instead building legislative majorities bill by bill. His "Kaas Protocol" establishes informal norms: the President consults parliamentary leaders before appointments, coordinates foreign policy with the Chancellor, and never dismisses a government that retains Reichstag confidence. These conventions, though unwritten, become the Republic's de facto constitution.
+
+The Nazi threat is managed through containment rather than confrontation. Kaas negotiates the "Berlin Agreement" (1933): the NSDAP enters a "loyal opposition" in exchange for ending paramilitary violence and recognizing the constitution. Hitler, aging and increasingly erratic, accepts. The party splits; the radical wing is banned after a failed putsch in 1934, while the "National Social Democrats" become a conventional right-wing party.
+
+Economically, Kaas supports Brüning's deflationary policies initially but pivots to expansion after 1933, backing public works and credit reform. The "Kaas Plan" — negotiated with unions, employers, and banks — ends the banking crisis through state-guaranteed recapitalization. Unemployment peaks at 32% in 1932 but falls below 15% by 1936.
+
+In foreign policy, Kaas is the architect of the "European Security Pact" (1935): a mutual defense treaty between Germany, France, Belgium, Czechoslovakia, and Poland, guaranteed by Britain and Italy. The Pact ends the Rhineland occupation early, recognizes Germany's 1919 borders, and establishes a permanent conciliation commission. Hitler denounces it; the Reichstag ratifies it overwhelmingly.
+
+Today, Germany is a "consensus democracy." The party system is fragmented but functional: Center/CVP, SPD, liberals, conservatives, and agrarians form shifting coalitions. The presidency is a moral office — Kaas's successors include a Protestant theologian, a Jewish jurist, and a trade union leader. The Reichswehr is small, professional, and subordinated to a parliamentary defense committee. The Republic, once thought doomed, has become boring — its greatest achievement.
+
+- @go_back
+
+@adenauer_president_win
+title: The Chancellor's Republic
+subtitle: Ending 12
+view-if: president == "Adenauer" and not civil_war_seen and not nsdap_win and not dnef_win and not hammerstein_win and not monarchy_win and not papen_win and not left_win
+new-page: true
+
+Konrad Adenauer's election as President — at 56, the youngest in the Republic's history — signals a generational shift. The former Mayor of Cologne and Center Party modernizer campaigned on "order, liberty, and Europe." His victory, backed by a Center-DVP-LVP coalition with SPD toleration, ends the era of Hindenburg's reactionary presidency.
+
+Adenauer transforms the office. He reads the constitution literally: the President appoints the Chancellor, represents the state abroad, commands the armed forces — and otherwise governs through the Chancellor. He refuses to be a "replacement Kaiser," establishing the "Adenauer Doctrine": presidential power is exercised only to defend the constitutional order, never to impose policy preferences.
+
+The Nazis are marginalized through strategic statecraft. Adenauer backs the 1933 "Law for the Defense of the Republic," banning paramilitaries and extremist propaganda. The SA is dissolved; Hitler is arrested for treason after the 1934 Röhm Putsch attempt. The NSDAP fragments into a marginalized radical sect and a "German National Party" that participates in elections but never crosses 5%.
+
+Domestically, Adenauer oversees the "Rhenish Model": a social market economy combining ordoliberal competition policy with strong welfare provisions, co-determination in heavy industry, and a currency board linking the mark to gold and hard currencies. The 1935 "Cologne Agreement" between unions and employers enshrines this model. Unemployment vanishes by 1937; Germany becomes Europe's export powerhouse.
+
+In Europe, Adenauer is the father of integration. The 1936 "Aachen Treaty" creates a Franco-German coal and steel pool. The 1938 "Strasbourg Convention" establishes a European customs union. By 1940, a European Parliament sits in Strasbourg, and a European Court of Justice in Luxembourg. Germany's eastern borders are guaranteed by treaty with Poland and Czechoslovakia (1939), ending revisionism.
+
+Today, Germany is the anchor of a federal Europe. The presidency alternates between Center/CVP and SPD leaders. The Chancellor — elected by a Bundestag with a mixed-member proportional system — is the true executive. The Bundeswehr is a parliamentary army. Adenauer's portrait hangs in the European Commission's Berlaymont building: "The man who made the Republic European."
+
+- @go_back

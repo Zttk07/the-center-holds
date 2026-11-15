@@ -1,0 +1,93 @@
+title: Right Faction Splits
+new-page: true
+subtitle: The Right faction's disagreements with party policy have grown too severe.
+tags: event
+view-if: right_dissent >= 60 and not right_wing_left and z_right_split_timer = 0
+on-arrival: {!
+Q.right_wing_left = 1;
+Q.z_right_split_timer = 4;
+
+if (Q.right_strength < 10) {
+    Q.catholics_z -= 3;
+    Q.rural_z -= 3;
+    Q.catholics_dnvp += 3;
+    Q.rural_dnvp += 3;
+    Q.new_middle_dnvp += 2;
+    Q.old_middle_dnvp += 2;
+} else if (Q.right_strength < 25) {
+    Q.catholics_z -= 4;
+    Q.rural_z -= 4;
+    Q.new_middle_z -= 2;
+    Q.old_middle_z -= 2;
+    Q.catholics_dnvp += 4;
+    Q.rural_dnvp += 4;
+    Q.new_middle_dnvp += 3;
+    Q.old_middle_dnvp += 3;
+    if (Q.kvp_formed) {
+        Q.catholics_kvp += 3;
+        Q.rural_kvp += 3;
+    }
+} else if (Q.right_strength < 40) {
+    Q.catholics_z -= 5;
+    Q.rural_z -= 5;
+    Q.new_middle_z -= 3;
+    Q.old_middle_z -= 3;
+    Q.catholics_dnvp += 5;
+    Q.rural_dnvp += 5;
+    Q.new_middle_dnvp += 4;
+    Q.old_middle_dnvp += 4;
+    if (Q.kvp_formed) {
+        Q.catholics_kvp += 4;
+        Q.rural_kvp += 4;
+    }
+} else if (Q.right_strength < 60) {
+    Q.catholics_z -= 6;
+    Q.rural_z -= 6;
+    Q.new_middle_z -= 4;
+    Q.old_middle_z -= 4;
+    Q.catholics_dnvp += 6;
+    Q.rural_dnvp += 6;
+    Q.new_middle_dnvp += 5;
+    Q.old_middle_dnvp += 5;
+    if (Q.kvp_formed) {
+        Q.catholics_kvp += 5;
+        Q.rural_kvp += 5;
+    }
+} else {
+    Q.catholics_z -= 8;
+    Q.rural_z -= 8;
+    Q.new_middle_z -= 6;
+    Q.old_middle_z -= 6;
+    Q.catholics_dnvp += 8;
+    Q.rural_dnvp += 8;
+    Q.new_middle_dnvp += 7;
+    Q.old_middle_dnvp += 7;
+    if (Q.kvp_formed) {
+        Q.catholics_kvp += 6;
+        Q.rural_kvp += 6;
+    }
+}
+
+Q.dnvp_relation += 10;
+Q.bvp_relations -= 15;
+if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+Q.z_relation -= 10;
+
+Q.right_strength = Q.right_strength * 0.3;
+
+Q.n_advisors_start = Q.n_advisors;
+if (Q.bracht_advisor == 1) Q.n_advisors -= 1;
+Q.bracht_advisor = 0;
+if (Q.kaas_advisor == 1) Q.n_advisors -= 1;
+Q.kaas_advisor = 0;
+if (Q.bruning_advisor == 1) Q.n_advisors -= 1;
+Q.bruning_advisor = 0;
+if (Q.n_advisors < Q.n_advisors_start) Q.shuffle_leadership_timer = 0;
+!}
+max-visits: 1
+
+= Right Faction leaves the party
+
+The Right faction, led by conservative notables including Bracht and elements around Kaas and Brüning, has abandoned the party. They declare that the Zentrum has betrayed its Catholic and national principles by accommodating the Left and the Republic. Most defect to the <span style="color: #3E88B3;">**DNVP**</span>[? if kvp_formed: and <span style="color: #0087DC;">**KVP**</span>?], taking their Catholic rural and middle-class networks with them.
+
+The BVP condemns this split as irresponsible, warning it hands the Catholic electorate to the radical right.

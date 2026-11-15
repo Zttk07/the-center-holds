@@ -1,0 +1,7 @@
+# Barons Faction Strength
+
+(0..5) <span style="color:#3A3A1A;">negligible</span>
+(6..15) <span style="color:#5A5A2A;">weak</span>
+(16..30) <span style="color:#7A7A3A;">moderate</span>
+(31..50) <span style="color:#9A9A4A;">strong</span>
+(51..100) <span style="color:#BABA5A;">dominant</span>

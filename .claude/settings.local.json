@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(rtk ls *)",
+      "Bash(cd *)"
+    ]
+  },
+  "prefersReducedMotion": false
+}

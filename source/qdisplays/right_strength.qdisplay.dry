@@ -1,0 +1,7 @@
+# Right Faction Strength
+
+(0..5) <span style="color:#1A3A5C;">negligible</span>
+(6..15) <span style="color:#2A5A8C;">weak</span>
+(16..30) <span style="color:#3A7ACC;">moderate</span>
+(31..50) <span style="color:#4A9AD8;">strong</span>
+(51..100) <span style="color:#5ABAE8;">dominant</span>

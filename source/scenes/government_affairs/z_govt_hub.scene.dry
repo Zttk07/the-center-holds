@@ -1,0 +1,313 @@
+title: Zentrum Government Affairs
+new-page: true
+is-card: true
+tags: govt_affairs
+view-if: z_in_government == 1 and govt_affairs_timer <= 0
+on-arrival: month_actions += 1; govt_affairs_timer = 4;
+card-image: img/reichstag_2.jpg
+
+= Zentrum Government Affairs
+
+As the leading party in government (or key coalition partner), the Zentrum must manage cabinet affairs, parliamentary business, and relations with coalition partners.
+
+- @z_coalition_management: Coalition Management
+- @z_parliamentary_affairs: Parliamentary Affairs
+- @z_cabinet_affairs: Cabinet Affairs
+- @z_presidential_relations: Presidential Relations
+- @easy_discard
+
+@z_coalition_management
+title: Coalition Management
+subtitle: Manage relations with coalition partners and adjust coalition policy.
+choose-if: coalition_type != 'none'
+unavailable-subtitle: [? if coalition_type == 'none': Not in a coalition government. ?]
+on-arrival: out_of_government_malus = 0
+go-to: z_coalition_event
+
+@z_coalition_event
+title: Coalition Committee Meeting
+new-page: true
+on-arrival: {!
+var partners = "";
+var roll = Math.random();
+if (Q.coalition_type == 'volksfront') {
+    partners = "SPD and KPD";
+    if (roll < 0.5) {
+        Q.kpd_relation += 5;
+        Q.spd_relation += 3;
+        Q.z_coalition_text = "Popular Front coordination proceeds smoothly. SPD and KPD relations improve.";
+    } else {
+        Q.kpd_relation -= 3;
+        Q.spd_relation -= 2;
+        Q.left_dissent += 2;
+        Q.anti_fascist_dissent -= 2;
+        Q.z_coalition_text = "Tensions between SPD and KPD complicate coalition work. Left faction concerned, Anti-Fascists relieved by firm line.";
+    }
+} else if (Q.coalition_type == 'weimarer') {
+    partners = "SPD and DDP";
+    if (roll < 0.5) {
+        Q.spd_relation += 5;
+        Q.ddp_relation += 4;
+        Q.center_strength += 1;
+        Q.z_coalition_text = "Weimar Coalition functions well. Center faction validated.";
+    } else {
+        Q.spd_relation -= 2;
+        Q.ddp_relation -= 3;
+        Q.center_dissent += 3;
+        Q.z_coalition_text = "Liberal-Catholic friction on school policy. Center faction dissent rises.";
+    }
+} else if (Q.coalition_type == 'groko') {
+    partners = "SPD, DDP, DVP, and Center";
+    if (roll < 0.4) {
+        Q.spd_relation += 3;
+        Q.ddp_relation += 3;
+        Q.dvp_relation += 3;
+        Q.center_strength += 2;
+        Q.z_coalition_text = "Grand Coalition holds together. Center faction strengthened.";
+    } else {
+        Q.spd_relation -= 2;
+        Q.dvp_relation -= 4;
+        Q.right_strength += 2;
+        Q.right_dissent -= 2;
+        Q.z_coalition_text = "DVP pushes right on economic policy. Right faction gains influence.";
+    }
+} else if (Q.coalition_type == 'mittel' || Q.coalition_type == 'verfassungs') {
+    partners = "DDP, DVP, and Center (Bourgeois/Constitutional)";
+    if (roll < 0.5) {
+        Q.ddp_relation += 4;
+        Q.dvp_relation += 3;
+        Q.center_strength += 1;
+        Q.christian_unity_strength += 1;
+        Q.z_coalition_text = "Bourgeois coalition functions. Center and Christian Unity factions satisfied.";
+    } else {
+        Q.dvp_relation -= 3;
+        Q.right_strength += 2;
+        Q.christian_unity_dissent += 2;
+        Q.z_coalition_text = "DVP's anti-parliamentary rhetoric concerns Christian Unity wing.";
+    }
+} else if (Q.coalition_type == 'bourgeois' || Q.coalition_type == 'mittel_recht') {
+    partners = "DVP, DNVP, and Center (Centre-Right)";
+    if (roll < 0.4) {
+        Q.dvp_relation += 3;
+        Q.dnvp_relation += 2;
+        Q.right_strength += 3;
+        Q.right_dissent -= 2;
+        Q.z_coalition_text = "Centre-right coalition advances conservative agenda. Right faction empowered.";
+    } else {
+        Q.dnvp_relation -= 4;
+        Q.left_strength += 2;
+        Q.anti_fascist_strength += 2;
+        Q.left_dissent -= 2;
+        Q.anti_fascist_dissent -= 2;
+        Q.z_coalition_text = "DNVP radicalism alarms Left and Anti-Fascist factions. They mobilize in response.";
+    }
+} else if (Q.coalition_type == 'recht' || Q.coalition_type == 'gross_mittel_recht' || Q.coalition_type == 'schwarz_braun') {
+    partners = "DNVP/NSDAP and Center (Right/Black-Brown)";
+    Q.presidential_opinion -= 5;
+    if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+    Q.left_strength -= 3;
+    Q.anti_fascist_strength -= 2;
+    Q.left_dissent += 5;
+    Q.anti_fascist_dissent += 5;
+    Q.right_strength += 5;
+    Q.right_dissent -= 3;
+    Q.z_coalition_text = "Right-wing coalition formed. Presidential opinion declines. Left and Anti-Fascist factions in revolt. Right faction dominates.";
+} else {
+    partners = "unknown";
+    Q.z_coalition_text = "Coalition type not recognized.";
+}
+
+// Call faction strength update based on coalition type
+!}
+call: update_faction_strengths
+
+**Coalition with:** [+ partners +]
+
+{! Q.z_coalition_text !}
+
+Current Coalition Type: [+ coalition_type +]
+
+- @z_govt_hub: Return to Government Affairs
+
+@z_parliamentary_affairs
+title: Parliamentary Affairs
+subtitle: Manage Reichstag business, legislation, and opposition relations.
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs parliamentary work</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+!}
+go-to: z_parliament_event
+
+@z_parliament_event
+title: Reichstag Business
+new-page: true
+on-arrival: {!
+var roll = Math.random();
+// Malus reduces effectiveness of opposition work
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+}
+if (Q.z_in_government == 1) {
+    if (roll < 0.4) {
+        Q.z_relation += Math.max(1, 3 - malus_penalty);
+        Q.ddp_relation += Math.max(0, 2 - malus_penalty);
+        Q.dvp_relation += Math.max(0, 1 - malus_penalty);
+        Q.z_parliament_text = "Government legislation passes with Center support. Relations with democratic parties improve.";
+    } else if (roll < 0.7) {
+        Q.dnvp_relation -= Math.max(1, 3 - malus_penalty);
+        Q.nsdap_relation -= Math.max(1, 2 - malus_penalty);
+        Q.anti_fascist_strength += Math.max(0, 1 - malus_penalty);
+        Q.anti_fascist_dissent -= Math.max(0, 2 - malus_penalty);
+        Q.z_parliament_text = "Opposition attacks from Right repelled. Anti-Fascist faction emboldened.";
+    } else {
+        Q.z_relation -= Math.max(1, 2 + malus_penalty);
+        Q.center_dissent += Math.max(1, 3 + malus_penalty);
+        Q.z_parliament_text = "Parliamentary maneuvering exhausts the Center. Center faction dissent rises.";
+    }
+} else {
+    if (roll < 0.5) {
+        Q.z_relation += Math.max(0, 2 - malus_penalty);
+        Q.out_of_government_malus = Math.max(0, Q.out_of_government_malus - Math.max(1, 2 - malus_penalty));
+        Q.z_parliament_text = "Effective opposition work. Out-of-government malus reduced.";
+    } else {
+        Q.out_of_government_malus += Math.max(3, 3 + malus_penalty);
+        Q.left_dissent += Math.max(1, 2 + malus_penalty);
+        Q.right_dissent += Math.max(1, 2 + malus_penalty);
+        Q.z_parliament_text = "Opposition struggles to be heard. Malus increases, factions restless.";
+    }
+}
+if (malus_penalty > 0) {
+    Q.z_parliament_text += " <span style=\"color:#8B0000;\">Out-of-government malus impairs parliamentary effectiveness.</span>";
+}
+!}
+
+{! Q.z_parliament_text !} Out-of-Government Malus: [+ out_of_government_malus +]
+
+- @z_govt_hub: Return to Government Affairs
+
+@z_cabinet_affairs
+title: Cabinet Affairs
+subtitle: Manage ministerial portfolios and policy implementation.
+view-if: chancellor_party == "Z" or z_in_government == 1
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if chancellor_party != "Z" and z_in_government == 0: Zentrum not in government. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs cabinet influence</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+!}
+go-to: z_cabinet_event
+
+@z_cabinet_event
+title: Cabinet Meeting
+new-page: true
+on-arrival: {!
+var roll = Math.random();
+// Malus reduces effectiveness for coalition partners
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+}
+if (Q.chancellor_party == "Z") {
+    if (roll < 0.5) {
+        Q.presidential_opinion += Math.max(1, 3 - malus_penalty);
+        Q.center_strength += Math.max(0, 2 - malus_penalty);
+        Q.christian_unity_strength += Math.max(0, 1 - malus_penalty);
+        Q.z_cabinet_text = "Zentrum Chancellor steers cabinet effectively. Presidential opinion and Center/Christian Unity factions rise.";
+    } else {
+        Q.dvp_relation -= Math.max(1, 2 + malus_penalty);
+        Q.dnvp_relation -= Math.max(1, 2 + malus_penalty);
+        Q.right_dissent += Math.max(1, 2 + malus_penalty);
+        Q.z_cabinet_text = "Cabinet conflicts with right-wing ministers. Right faction discontent.";
+    }
+} else if (Q.z_in_government == 1) {
+    if (roll < 0.5) {
+        Q.z_relation += Math.max(0, 2 - malus_penalty);
+        if (Q.coalition_type == 'volksfront') {
+            Q.kpd_relation += Math.max(0, 2 - malus_penalty);
+        } else {
+            Q.ddp_relation += Math.max(0, 2 - malus_penalty);
+        }
+        Q.z_cabinet_text = "Zentrum ministers deliver results in coalition. Relations improve.";
+    } else {
+        Q.left_dissent += Math.max(1, 2 + malus_penalty);
+        Q.right_dissent += Math.max(1, 2 + malus_penalty);
+        Q.z_cabinet_text = "Ministerial disagreements. Both Left and Right factions dissatisfied.";
+    }
+} else {
+    Q.z_cabinet_text = "Zentrum not in cabinet.";
+}
+if (malus_penalty > 0) {
+    Q.z_cabinet_text += " <span style=\"color:#8B0000;\">Out-of-government malus limits cabinet influence.</span>";
+}
+!}
+
+{! Q.z_cabinet_text !}
+
+- @z_govt_hub: Return to Government Affairs
+
+@z_presidential_relations
+title: Presidential Relations
+subtitle: Manage relationship with President Hindenburg (0-100 scale).
+view-if: president == "Hindenburg"
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if president != "Hindenburg": Hindenburg is not President. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs presidential access</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+!}
+go-to: z_presidential_event
+
+@z_presidential_event
+title: Audience with Hindenburg
+new-page: true
+on-arrival: {!
+var roll = Math.random();
+var old_opinion = Q.presidential_opinion;
+// Malus reduces effectiveness of presidential relations
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+}
+if (roll < 0.3) {
+    Q.presidential_opinion += Math.max(2, 8 - malus_penalty);
+    if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+    Q.christian_unity_strength += Math.max(0, 1 - malus_penalty);
+    Q.christian_unity_dissent -= Math.max(0, 2 - malus_penalty);
+    Q.z_presidential_text = "Hindenburg receives you warmly. He appreciates the Zentrum's defense of Christian values and order. Presidential opinion rises significantly. Christian Unity faction strengthened.";
+} else if (roll < 0.6) {
+    Q.presidential_opinion += Math.max(1, 3 - malus_penalty);
+    if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+    Q.z_presidential_text = "Polite but cool audience. Hindenburg acknowledges your loyalty but remains skeptical of parliamentary democracy. Modest opinion gain.";
+} else if (roll < 0.85) {
+    Q.presidential_opinion -= Math.max(1, 3 + malus_penalty);
+    if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+    Q.right_strength += Math.max(0, 1 - malus_penalty);
+    Q.right_dissent -= Math.max(0, 1 - malus_penalty);
+    Q.z_presidential_text = "Hindenburg complains about 'party politics' and 'Marxist influence.' He hints at preferring a more authoritarian course. Right faction sees opportunity.";
+} else {
+    Q.presidential_opinion -= Math.max(4, 8 + malus_penalty);
+    if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+    Q.left_dissent += Math.max(1, 3 + malus_penalty);
+    Q.anti_fascist_dissent += Math.max(1, 3 + malus_penalty);
+    Q.z_presidential_text = "Disastrous meeting. Hindenburg berates the Zentrum for 'betraying the nation' and threatens to appoint a presidential cabinet. Left and Anti-Fascist factions alarmed.";
+}
+if (malus_penalty > 0) {
+    Q.z_presidential_text += " <span style=\"color:#8B0000;\">Out-of-government malus weakens presidential access.</span>";
+}
+!}
+
+**Presidential Opinion:** [+ old_opinion +] → [+ presidential_opinion +] ([? if presidential_opinion <= 20: Very Poor ?][? if presidential_opinion > 20 and presidential_opinion <= 40: Poor ?][? if presidential_opinion > 40 and presidential_opinion <= 60: Neutral ?][? if presidential_opinion > 60 and presidential_opinion <= 80: High ?][? if presidential_opinion > 80: Very High ?])
+
+- @z_govt_hub: Return to Government Affairs

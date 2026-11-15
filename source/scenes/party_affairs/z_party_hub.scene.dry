@@ -1,0 +1,214 @@
+title: Zentrum Party Affairs
+new-page: true
+is-card: true
+tags: party_affairs
+view-if: party_affairs_timer <= 0
+on-arrival: month_actions += 1; party_affairs_timer = 4;
+card-image: img/portraits/MarxWilhelm.jpg
+
+= Zentrum Party Affairs
+
+The Zentrum party leadership gathers to discuss internal party matters. As party chairman, you must balance the competing factions while maintaining the party's Catholic character and democratic commitments.
+
+- @z_faction_balance: Manage Faction Balance
+- @z_faction_detail: View Faction Detail
+- @z_bvp_relations: BVP Relations
+- @z_bvp_integration: BVP Integration
+- @z_party_organization: Party Organization
+- @z_electoral_strategy: Electoral Strategy
+- @easy_discard
+
+@z_faction_balance
+title: Manage Faction Balance
+subtitle: Address tensions between the Left, Center, Right, Christian Unity, and Anti-Fascist wings.
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs faction management</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+!}
+go-to: z_faction_event
+
+@z_faction_detail
+title: Faction Detail
+subtitle: View detailed breakdown of all faction strength, dissent, and status.
+choose-if: resources >= 0
+unavailable-subtitle: Not enough resources.
+go-to: z_faction_detail
+
+@z_faction_event
+title: Faction Meeting
+new-page: true
+on-arrival: {!
+var roll = Math.random();
+// Malus reduces effectiveness
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+}
+if (roll < 0.3) {
+    Q.left_strength += Math.max(0, 2 - malus_penalty);
+    Q.left_dissent -= Math.max(0, 3 - malus_penalty);
+    Q.right_dissent += Math.max(0, 2 - malus_penalty);
+    // Anti-Fascist faction only affected if available
+    if (Q.anti_fascist_available) {
+        Q.anti_fascist_strength += Math.max(0, 1 - malus_penalty);
+        Q.anti_fascist_dissent -= Math.max(0, 2 - malus_penalty);
+    }
+    Q.z_faction_text = "The Left faction gains ground, arguing that only social reform can counter the Nazis. The Right grumbles.";
+} else if (roll < 0.6) {
+    Q.right_strength += Math.max(0, 2 - malus_penalty);
+    Q.right_dissent -= Math.max(0, 3 - malus_penalty);
+    Q.left_dissent += Math.max(0, 2 - malus_penalty);
+    Q.z_faction_text = "The Right faction presses for a conservative course. The Left warns of alienating workers.";
+} else {
+    Q.center_strength += Math.max(0, 1 - malus_penalty);
+    Q.center_dissent -= Math.max(0, 2 - malus_penalty);
+    Q.christian_unity_strength += Math.max(0, 1 - malus_penalty);
+    Q.christian_unity_dissent -= Math.max(0, 2 - malus_penalty);
+    Q.z_faction_text = "The Center holds, emphasizing Catholic unity above partisan divides. Christian Unity faction feels validated.";
+}
+if (malus_penalty > 0) {
+    Q.z_faction_text += " <span style=\"color:#8B0000;\">Out-of-government malus hampers faction coordination.</span>";
+}
+!}
+
+{! Q.z_faction_text !}
+
+- @z_party_hub: Return to Party Affairs
+
+@z_bvp_relations
+title: BVP Relations
+subtitle: Manage relations with the Bavarian People's Party (0-100 scale, Integration level 0-4).
+view-if: bvp_integration < 4
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if bvp_integration >= 4: BVP fully unified. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs BVP outreach</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+Q.bvp_relations += 5;
+if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+!}
+go-to: z_bvp_event
+
+@z_bvp_event
+title: BVP Negotiations
+new-page: true
+on-arrival: {!
+var roll = Math.random();
+if (roll < 0.4) {
+    Q.bvp_relations += 10;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.z_bvp_text = "BVP leadership responds positively to overtures. Relations improve.";
+} else if (roll < 0.7) {
+    Q.bvp_relations += 3;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.z_bvp_text = "Productive but cautious talks. BVP remains wary of Prussian dominance.";
+} else {
+    Q.bvp_relations -= 5;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.z_bvp_text = "Tensions flare over Bavarian autonomy. Relations deteriorate.";
+}
+!}
+
+{! Q.z_bvp_text !} Current BVP Relations: [+ bvp_relations +]. Integration Level: [+ bvp_integration +] ([? if bvp_integration == 0: Separate ?][? if bvp_integration == 1: Aligned ?][? if bvp_integration == 2: Associated ?][? if bvp_integration == 3: Enmeshed ?][? if bvp_integration == 4: Unified ?]).
+
+- @z_party_hub: Return to Party Affairs
+
+@z_party_organization
+title: Party Organization
+subtitle: Strengthen party infrastructure and membership.
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs organization</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+}
+Q.center_strength += Math.max(0, 2 - malus_penalty);
+Q.center_dissent -= Math.max(0, 2 - malus_penalty);
+Q.left_dissent -= Math.max(0, 1 - malus_penalty);
+Q.right_dissent -= Math.max(0, 1 - malus_penalty);
+!}
+go-to: z_org_event
+
+@z_org_event
+title: Organizational Work
+new-page: true
+
+Party organizers report on membership drives, local associations, and the Catholic press network.
+
+The Center faction benefits most from organizational stability. Dissent across factions eases slightly.
+
+- @z_party_hub: Return to Party Affairs
+
+@z_electoral_strategy
+title: Electoral Strategy
+subtitle: Plan for upcoming elections and adjust party positioning.
+view-if: time > 6
+choose-if: resources > 0
+unavailable-subtitle: [? if resources <= 0: Not enough resources. ?][? if time <= 6: Too early for election planning. ?][? if z_in_government != 1 and out_of_government_malus > 10: <span style="color:#8B0000;">High malus impairs electoral planning</span> ?]
+on-arrival: {!
+Q.resources -= 1;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    Q.resources -= Math.floor(Q.out_of_government_malus / 5);
+    if (Q.resources < 0) Q.resources = 0;
+}
+!}
+go-to: z_electoral_event
+
+@z_electoral_event
+title: Electoral Planning
+new-page: true
+on-arrival: {!
+var roll = Math.random();
+// Malus reduces effectiveness
+var malus_penalty = 0;
+if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
+    malus_penalty = Math.floor(Q.out_of_government_malus / 10);
+}
+if (roll < 0.25) {
+    Q.left_strength += Math.max(0, 3 - malus_penalty);
+    if (Q.anti_fascist_available) {
+        Q.anti_fascist_strength += Math.max(0, 2 - malus_penalty);
+        Q.z_electoral_text = "Strategy leans social-democratic. Left and Anti-Fascist factions energized.";
+    } else {
+        Q.z_electoral_text = "Strategy leans social-democratic. Left faction energized. (Anti-Fascist faction locked)";
+    }
+} else if (roll < 0.5) {
+    Q.center_strength += Math.max(0, 3 - malus_penalty);
+    Q.christian_unity_strength += Math.max(0, 2 - malus_penalty);
+    Q.z_electoral_text = "Centrist Catholic platform chosen. Center and Christian Unity strengthened.";
+} else if (roll < 0.75) {
+    Q.right_strength += Math.max(0, 3 - malus_penalty);
+    Q.christian_unity_strength += Math.max(0, 1 - malus_penalty);
+    Q.z_electoral_text = "Conservative-Catholic appeal selected. Right faction gains, Christian Unity modestly.";
+} else {
+    if (Q.anti_fascist_available) {
+        Q.anti_fascist_strength += Math.max(0, 4 - malus_penalty);
+        Q.left_strength += Math.max(0, 1 - malus_penalty);
+        Q.z_electoral_text = "Anti-fascist democratic front emphasized. Anti-Fascist faction surges."
+    } else {
+        Q.left_strength += Math.max(0, 2 - malus_penalty);
+        Q.z_electoral_text = "Anti-fascist platform considered but Anti-Fascist faction not yet unlocked. Left faction gains instead."
+    }
+}
+if (malus_penalty > 0) {
+    Q.z_electoral_text += " <span style=\"color:#8B0000;\">Out-of-government malus hampers electoral outreach.</span>";
+}
+!}
+
+{! Q.z_electoral_text !}
+
+- @z_party_hub: Return to Party Affairs

@@ -1,0 +1,37 @@
+title: Paul von Eltz-Rübenach
+new-page: true
+view-if: not eltz_rubenach_recruited or eltz_rubenach_recruited == 1
+tags: advisor
+choose-if: advisor_action_timer <= 0
+unavailable-subtitle: [? if advisor_action_timer > 0: [+ advisor_action_timer +] months until next advisor action. ?][? if eltz_rubenach_recruited > 1: Already used this month. ?]
+card-image: img/portraits/EltzRubenachPaul.jpg
+on-arrival: {!
+if (!Q.eltz_rubenach_recruited) {
+    Q.eltz_rubenach_recruited = 1;
+    Q.barons_strength += 5;
+    Q.barons_dissent -= 2;
+    Q.christian_unity_strength += 5;
+    Q.christian_unity_dissent -= 3;
+    Q.presidential_opinion += 2;
+    Q.bvp_relations += 5;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.z_eltz_result = "Baron von Eltz-Ruebenach joins the cabinet. The Catholic aristocrat and Postmaster General bridges the Barons and Christian Unity factions. His technocratic prestige and BVP connections are valuable. Barons strength +5, Barons dissent -2, Christian Unity Strength +5, Christian Unity Dissent -3, Presidential Opinion +2, BVP Relations +5. Eltz-Ruebenach bows slightly. 'I serve the state, not the party. But today they coincide.'";
+} else {
+    Q.advisor_action_timer = 6;
+    Q.eltz_rubenach_recruited = 2;
+    Q.christian_unity_strength += 2;
+    Q.christian_unity_dissent -= 1;
+    Q.bvp_relations += 2;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.z_eltz_result = "Eltz-Ruebenach advises on communications and Bavarian affairs. His network spans the Reichspost and the BVP leadership. Christian Unity Strength +2, Christian Unity Dissent -1, BVP Relations +2. 'The post reaches every village. So too must the state's message,' Eltz-Ruebenach remarks.";
+}
+!}
+go-to: z_eltz_rubenach_event
+
+@z_eltz_rubenach_event
+title: Eltz-Ruebenach Consultation
+new-page: true
+
+{! Q.z_eltz_result !}
+
+- @z_advisors_hub: Return to Advisors

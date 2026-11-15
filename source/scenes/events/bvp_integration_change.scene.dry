@@ -1,0 +1,78 @@
+title: BVP Relations Shift
+new-page: true
+tags: event
+view-if: bvp_integration > 0 and bvp_integration < 4
+on-arrival: {!
+var roll = Math.random();
+// BVP Relations auto-decay when low (spec §4.2: -3/month when relations < 30)
+if (Q.bvp_relations < 30) {
+    Q.bvp_relations -= 3;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.bvp_relation_text = "BVP relations continue to deteriorate due to neglect. Current relations: " + Q.bvp_relations;
+}
+// Integration decay at very low relations (spec §4.3: 1 level per 3 months if relations < 20)
+if (Q.bvp_relations < 20) {
+    Q.bvp_integration_decay_timer = (Q.bvp_integration_decay_timer || 0) + 1;
+    if (Q.bvp_integration_decay_timer >= 3) {
+        Q.bvp_integration -= 1;
+        if (Q.bvp_integration < 0) Q.bvp_integration = 0;
+        Q.bvp_integration_decay_timer = 0;
+        Q.bvp_relation_text += "\nBVP integration slips to " + (Q.bvp_integration == 0 ? "Separate" : Q.bvp_integration == 1 ? "Aligned" : Q.bvp_integration == 2 ? "Associated" : Q.bvp_integration == 3 ? "Enmeshed" : "Unified") + ".";
+    }
+} else {
+    Q.bvp_integration_decay_timer = 0;
+}
+
+// Random events affecting BVP relations
+if (roll < 0.15) {
+    // Bavarian autonomy dispute
+    Q.bvp_relations -= 10;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.bvp_relation_text = "A dispute over Bavarian autonomy flares in the Reichstag. The BVP accuses Berlin of centralizing overreach. BVP Relations -10.";
+} else if (roll < 0.25) {
+    // Catholic education policy alignment
+    Q.bvp_relations += 5;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.bvp_relation_text = "Cooperation on Catholic school policy yields goodwill. The BVP appreciates Zentrum support for confessional education. BVP Relations +5.";
+} else if (roll < 0.35) {
+    // Bavarian police/Reichswehr tension
+    Q.bvp_relations -= 5;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.bvp_relation_text = "Tensions over Bavarian police jurisdiction vs. Reichswehr authority. BVP Relations -5.";
+} else if (roll < 0.45 && Q.chancellor_party == "Z") {
+    // Zentrum Chancellor helps relations
+    Q.bvp_relations += 5;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.bvp_relation_text = "Zentrum Chancellor consults BVP on cabinet appointments. Relations improve. BVP Relations +5.";
+} else if (roll < 0.55 && Q.z_in_government == 1) {
+    // Coalition partner consultation
+    Q.bvp_relations += 3;
+    if (Q.bvp_relations > 100) Q.bvp_relations = 100;
+    Q.bvp_relation_text = "BVP included in coalition deliberations. Relations improve modestly. BVP Relations +3.";
+} else if (roll < 0.65 && Q.coalition_type == 'bourgeois' || Q.coalition_type == 'mittel_recht') {
+    // Right coalition alienates BVP
+    Q.bvp_relations -= 8;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.bvp_relation_text = "Centre-right coalition alarms BVP leadership. They fear DNVP dominance. BVP Relations -8.";
+} else if (roll < 0.75 && Q.coalition_type == 'volksfront') {
+    // Left coalition alienates BVP
+    Q.bvp_relations -= 10;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.bvp_relation_text = "Popular Front coalition horrifies BVP. Cooperation with KPD seen as betrayal of Catholic order. BVP Relations -10.";
+} else if (roll < 0.85 && Q.anti_fascist_available) {
+    // Anti-Fascist path concerns BVP
+    Q.bvp_relations -= 3;
+    if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+    Q.bvp_relation_text = "BVP observers uneasy about Anti-Fascist faction influence. They fear revolutionary rhetoric. BVP Relations -3.";
+} else {
+    // Stable relations
+    Q.bvp_relation_text = "BVP-Zentrum relations hold steady. Current level: " + Q.bvp_relations + "/100, Integration: " + (Q.bvp_integration == 0 ? "Separate" : Q.bvp_integration == 1 ? "Aligned" : Q.bvp_integration == 2 ? "Associated" : Q.bvp_integration == 3 ? "Enmeshed" : "Unified") + ".";
+}
+!}
+max-visits: 1
+
+= BVP Relations Update
+
+{! Q.bvp_relation_text !}
+
+- @z_party_hub: Return to Party Affairs

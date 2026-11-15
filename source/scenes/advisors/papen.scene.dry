@@ -1,0 +1,37 @@
+title: Franz von Papen
+new-page: true
+view-if: not papen_recruited or papen_recruited == 1
+tags: advisor
+choose-if: advisor_action_timer <= 0
+unavailable-subtitle: [? if advisor_action_timer > 0: [+ advisor_action_timer +] months until next advisor action. ?][? if papen_recruited and papen_recruited > 1: Already used this month. ?]
+card-image: img/portraits/PapenFranz.jpg
+on-arrival: {!
+if (!Q.papen_recruited) {
+    Q.papen_recruited = 1;
+    Q.barons_strength += 10;
+    Q.barons_dissent -= 5;
+    Q.presidential_opinion += 5;
+    if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+    Q.dnvp_relation += 5;
+    Q.left_dissent += 3;
+    Q.anti_fascist_dissent += 3;
+    Q.z_papen_result = "Papen agrees to advise the Zentrum government. The former Chancellor brings his unparalleled access to Hindenburg and the conservative establishment. The Barons faction forms within the party. Barons strength +10, Barons dissent -5, Presidential Opinion +5, DNVP Relations +5, Left Dissent +3, Anti-Fascist Dissent +3. Warning: Papen is an intriguer. His loyalty lasts only as long as his interests align with yours.";
+} else {
+    Q.advisor_action_timer = 6;
+    Q.papen_recruited = 2;
+    Q.presidential_opinion += 3;
+    if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+    Q.dnvp_relation += 2;
+    Q.left_dissent += 1;
+    Q.z_papen_result = "Papen offers counsel on presidential politics. His channels to Hindenburg remain open. Presidential Opinion +3, DNVP Relations +2, Left Dissent +1. Papen smiles. 'The Field Marshal listens to reason, Herr Minister. Provided it's his own.'";
+}
+!}
+go-to: z_papen_event
+
+@z_papen_event
+title: Papen Consultation
+new-page: true
+
+{! Q.z_papen_result !}
+
+- @z_advisors_hub: Return to Advisors

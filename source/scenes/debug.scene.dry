@@ -1,0 +1,182 @@
+title: Debug Menu
+new-page: true
+is-special: true
+
+= Debug Menu
+
+This scene provides debugging tools for development and testing.
+
+@main
+go-to: root.start
+
+- @set_variables: Set test variables
+- @check_state: Check current game state
+- @force_events: Force specific events
+- @test_z_presidential: Test Zentrum presidential election paths
+- @backSpecialScene: Exit debug menu.
+
+@set_variables
+title: Set Test Variables
+go-to: main
+
+- @set_1932: Set up 1932 presidential election
+- @set_z_player: Set player as Zentrum
+- @set_hindenburg: Set Hindenburg as president
+- @set_factions: Set up Zentrum factions
+- @back: Back
+
+@set_1932
+on-arrival: {!
+Q.year = 1932;
+Q.month = 2;
+Q.hindenburg_term_extended = 0;
+Q.hindenburg_run = 0;
+!}
+go-to: set_variables
+
+@set_z_player
+on-arrival: {!
+Q.player_party = 'z';
+Q.z_party_name = 'Zentrum';
+Q.started = 1;
+!}
+go-to: set_variables
+
+@set_hindenburg
+on-arrival: {!
+Q.president = 'Hindenburg';
+!}
+go-to: set_variables
+
+@set_factions
+on-arrival: {!
+Q.left_z_strength = 30;
+Q.center_z_strength = 40;
+Q.right_z_strength = 20;
+Q.christian_unity_z_strength = 25;
+Q.anti_fascist_z_strength = 15;
+Q.barons_strength = 10;
+Q.left_z_dissent = 10;
+Q.center_z_dissent = 5;
+Q.right_z_dissent = 15;
+Q.christian_unity_z_dissent = 10;
+Q.anti_fascist_z_dissent = 5;
+Q.barons_dissent = 20;
+!}
+go-to: set_variables
+
+@check_state
+title: Current Game State
+go-to: main
+
+Year: [+ year +]
+Month: [+ month +]
+Player Party: [+ player_party +]
+President: [+ president +]
+Chancellor: [+ chancellor +]
+Z Party Name: [+ z_party_name +]
+
+Zentrum Factions:
+Left: [+ left_z_strength +] strength, [+ left_z_dissent +] dissent
+Center: [+ center_z_strength +] strength, [+ center_z_dissent +] dissent
+Right: [+ right_z_strength +] strength, [+ right_z_dissent +] dissent
+Christian Unity: [+ christian_unity_z_strength +] strength, [+ christian_unity_z_dissent +] dissent
+Anti-Fascist: [+ anti_fascist_z_strength +] strength, [+ anti_fascist_z_dissent +] dissent
+Barons: [+ barons_strength +] strength, [+ barons_dissent +] dissent
+
+Presidential Opinion: [+ presidential_opinion +]
+Hindenburg Run: [+ hindenburg_run +]
+Z Campaign: [+ z_campaign +]
+Z Candidate: [+ z_candidate_1932 +]
+Z Strategy: [+ z_campaign_strategy +]
+
+@force_events
+title: Force Events
+go-to: main
+
+- @force_hindenburg: Force Hindenburg announcement
+- @force_z_candidate: Force Zentrum candidate selection
+- @force_round1: Force Round 1
+- @force_round2: Force Round 2
+- @force_1934: Force 1934 election
+- @back: Back
+
+@force_hindenburg
+on-arrival: {!
+Q.year = 1932;
+Q.month = 2;
+Q.hindenburg_term_extended = 0;
+!}
+go-to: presidential_election_1932_hindenburg
+
+@force_z_candidate
+on-arrival: {!
+Q.player_party = 'z';
+Q.year = 1932;
+Q.month = 3;
+!}
+go-to: presidential_election_1932_candidate
+
+@force_round1
+on-arrival: {!
+Q.year = 1932;
+Q.month = 3;
+Q.z_campaign = 1;
+Q.z_candidate_1932 = 'Marx';
+!}
+go-to: presidential_election_1932_round_1
+
+@force_round2
+on-arrival: {!
+Q.year = 1932;
+Q.month = 4;
+Q.z_campaign = 1;
+Q.z_candidate_1932 = 'Marx';
+!}
+go-to: presidential_election_1932_round_2
+
+@force_1934
+on-arrival: {!
+Q.year = 1934;
+Q.month = 8;
+Q.president = 'Hindenburg';
+!}
+go-to: presidential_election_1934
+
+@test_z_presidential
+title: Test Zentrum Presidential Paths
+go-to: main
+
+- @test_marx_win: Test Marx victory path
+- @test_stegerwald_win: Test Stegerwald victory path
+- @test_kaas_win: Test Kaas victory path
+- @test_adenauer_win: Test Adenauer victory path (1934)
+- @back: Back
+
+@test_marx_win
+on-arrival: {!
+Q.president = 'Marx';
+Q.achievement_marx_president = 1;
+!}
+go-to: ending_slides
+
+@test_stegerwald_win
+on-arrival: {!
+Q.president = 'Stegerwald';
+Q.achievement_stegerwald_president = 1;
+!}
+go-to: ending_slides
+
+@test_kaas_win
+on-arrival: {!
+Q.president = 'Kaas';
+Q.achievement_kaas_president = 1;
+!}
+go-to: ending_slides
+
+@test_adenauer_win
+on-arrival: {!
+Q.president = 'Adenauer';
+Q.achievement_adenauer_president = 1;
+!}
+go-to: ending_slides

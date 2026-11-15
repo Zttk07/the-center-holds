@@ -1,0 +1,83 @@
+title: Barons Cabinet Formation
+new-page: true
+tags: event
+view-if: barons_strength >= 50 and presidential_opinion >= 60 and chancellor_party == "Z" and not hitler_cabinet
+on-arrival: {!
+Q.barons_cabinet_text = "";
+var roll = Math.random();
+
+// Base DVP, DNVP, Others support for Barons cabinet
+var dvp_support = 15;
+var dnvp_support = 15;
+var others_support = 10;
+
+// Adjust for advisors
+if (Q.papen_recruited) { dvp_support += 5; dnvp_support += 5; }
+if (Q.schleicher_recruited) { dnvp_support += 10; others_support += 5; }
+if (Q.krosigk_recruited) { dvp_support += 5; others_support += 3; }
+if (Q.eltz_rubenach_recruited) { dvp_support += 3; others_support += 3; }
+
+// Adjust for presidential opinion
+if (Q.presidential_opinion >= 80) { dvp_support += 5; dnvp_support += 5; others_support += 5; }
+else if (Q.presidential_opinion >= 60) { dvp_support += 3; dnvp_support += 3; others_support += 2; }
+
+// Adjust for faction strength
+if (Q.right_strength >= 30) { dnvp_support += 5; }
+if (Q.barons_strength >= 70) { dvp_support += 5; dnvp_support += 5; others_support += 5; }
+
+if (roll < 0.3) {
+    // Success: Barons cabinet forms with broad right-wing support
+    Q.coalition_type = 'bourgeois';
+    Q.z_in_government = 1;
+    Q.out_of_government_malus = 0;
+    Q.dvp_relation += 10;
+    Q.dnvp_relation += 10;
+    Q.presidential_opinion += 5;
+    if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+    Q.barons_strength += 10;
+    Q.barons_dissent -= 5;
+    Q.right_strength += 5;
+    Q.right_dissent -= 3;
+    Q.left_dissent += 5;
+    Q.anti_fascist_dissent += 5;
+    Q.center_dissent += 3;
+    Q.christian_unity_strength += 3;
+    Q.christian_unity_dissent -= 2;
+    Q.barons_cabinet_text = "The Barons faction, backed by Hindenburg and the Reichswehr, engineers a cabinet reshuffle. Zentrum leads a 'bourgeois' coalition with DVP, DNVP, and conservative independents. The new cabinet commands: DVP " + dvp_support + "%, DNVP " + dnvp_support + "%, Others " + others_support + "%. Presidential Opinion +5, Barons +10, Right +5, Left/Anti-Fascist dissent rises. 'Order is restored,' murmurs Papen. 'For now.'";
+} else if (roll < 0.6) {
+    // Partial success: Minority cabinet, unstable
+    Q.coalition_type = 'mittel_recht';
+    Q.z_in_government = 1;
+    Q.out_of_government_malus = 5;
+    Q.dvp_relation += 5;
+    Q.dnvp_relation += 3;
+    Q.presidential_opinion += 2;
+    if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+    Q.barons_strength += 5;
+    Q.barons_dissent -= 2;
+    Q.right_strength += 3;
+    Q.left_dissent += 3;
+    Q.anti_fascist_dissent += 3;
+    Q.center_dissent += 2;
+    Q.barons_cabinet_text = "The Barons faction forms a minority 'centre-right' cabinet. DVP and DNVP tolerate it but withhold full support. Support: DVP " + dvp_support + "%, DNVP " + dnvp_support + "%, Others " + others_support + "%. Presidential Opinion +2. The cabinet is fragile. Papen warns: 'We govern on sufferance. One misstep and the President dissolves us.'";
+} else {
+    // Failure: President rejects, coalition crisis
+    Q.presidential_opinion -= 5;
+    if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+    Q.barons_dissent += 10;
+    Q.left_strength += 3;
+    Q.anti_fascist_strength += 3;
+    Q.left_dissent -= 3;
+    Q.anti_fascist_dissent -= 3;
+    Q.center_dissent += 5;
+    Q.christian_unity_dissent += 5;
+    Q.barons_cabinet_text = "Hindenburg rejects the Barons' cabinet proposal. 'The parties must sort this out themselves,' he grumbles. The Zentrum's conservative gambit fails. Presidential Opinion -5, Barons dissent +10. Left and Anti-Fascist factions rally: 'The Barons overreached.' Center and Christian Unity wings panic: 'We look like plotters.'";
+}
+!}
+max-visits: 1
+
+= Barons Cabinet Initiative
+
+{! Q.barons_cabinet_text !}
+
+- @z_govt_hub: Return to Government Affairs

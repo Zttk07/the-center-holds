@@ -1,0 +1,365 @@
+title: Presidential Election 1934
+subtitle: After Hindenburg's death, a new presidential election is called.
+new-page: true
+tags: event
+view-if: hindenburg_dead == 1 and not presidential_election_1934_done
+on-arrival: {!
+Q.presidential_election_1934_phase = 1;
+// Determine candidates based on faction state and political landscape
+// NSDAP candidate
+if (!Q.hitler_deported && Q.hitler_citizen) {
+    Q.nsdap_candidate_1934 = "Hitler";
+    Q.nsdap_candidate_1934_disp = "Adolf Hitler";
+} else {
+    Q.nsdap_candidate_1934 = "Göring";
+    Q.nsdap_candidate_1934_disp = "Hermann Göring";
+}
+
+// KPD candidate - Thälmann banned per spec §8.4
+Q.communist_candidate_1934 = "Thälmann_banned";
+Q.communist_candidate_1934_disp = "Ernst Thälmann (banned)";
+
+// SPD candidate
+Q.spd_candidate_1934 = "Braun";
+Q.spd_candidate_1934_disp = "Otto Braun";
+
+// Zentrum candidate selection based on faction strength
+if (Q.christian_unity_strength >= 40 && Q.cdu_formed == 0) {
+    Q.z_candidate_1934 = "Adenauer";
+    Q.z_candidate_1934_disp = "Konrad Adenauer (CDU)";
+} else if (Q.stegerwald_path == 1 || Q.christian_unity_strength >= 30) {
+    Q.z_candidate_1934 = "Stegerwald";
+    Q.z_candidate_1934_disp = "Adam Stegerwald";
+} else if (Q.center_strength >= 30) {
+    Q.z_candidate_1934 = "Marx";
+    Q.z_candidate_1934_disp = "Wilhelm Marx";
+} else if (Q.right_strength >= 30) {
+    Q.z_candidate_1934 = "Kaas";
+    Q.z_candidate_1934_disp = "Ludwig Kaas";
+} else {
+    Q.z_candidate_1934 = "Marx";
+    Q.z_candidate_1934_disp = "Wilhelm Marx";
+}
+
+// Eckener candidacy - spec §8.3: anger threshold if dnvp_relation > 40 or nsdap_relation > 10
+if (Q.dnvp_relation <= 40 && Q.nsdap_relation <= 10 && Q.pro_republic >= 40) {
+    Q.eckener_available_1934 = 1;
+} else {
+    Q.eckener_available_1934 = 0;
+    Q.eckener_anger_reason = "";
+    if (Q.dnvp_relation > 40) Q.eckener_anger_reason += "DNVP relations too high. ";
+    if (Q.nsdap_relation > 10) Q.eckener_anger_reason += "NSDAP relations too high. ";
+}
+
+// Reactionary/Right candidate
+if (Q.papen_recruited) {
+    Q.reactionary_candidate_1934 = "Papen";
+    Q.reactionary_candidate_1934_disp = "Franz von Papen";
+} else if (Q.schleicher_recruited) {
+    Q.reactionary_candidate_1934 = "Schleicher";
+    Q.reactionary_candidate_1934_disp = "Kurt von Schleicher";
+} else if (Q.kvp_formed) {
+    Q.reactionary_candidate_1934 = "Hugenberg";
+    Q.reactionary_candidate_1934_disp = "Alfred Hugenberg";
+} else {
+    Q.reactionary_candidate_1934 = "Duesterberg";
+    Q.reactionary_candidate_1934_disp = "Theodor Duesterberg";
+}
+
+Q.presidential_election_1934_campaigning_seen = 1;
+!}
+priority: 1
+max-visits: 1
+go-to: election_1934_candidates
+
+@election_1934
+
+= Presidential Election 1934
+
+Paul von Hindenburg has died. The Constitution requires a new presidential election within one month. The Republic faces its most critical test: will the presidency fall to a defender of democracy, or to its enemies?
+
+The NSDAP runs [+ nsdap_candidate_1934_disp +]. The KPD would run Thälmann, but he is banned under the Reichstag Fire Decree. The SPD runs [+ spd_candidate_1934_disp +]. The Zentrum must choose its candidate: [+ z_candidate_1934_disp +].
+
+[? if eckener_available_1934: Hugo Eckener, the Zeppelin pioneer and anti-Nazi nationalist, is available as a unity candidate. ?][? if not eckener_available_1934: Hugo Eckener declines to run: [+ eckener_anger_reason +] ?]
+
+The Right runs [+ reactionary_candidate_1934_disp +].
+
+@election_1934_candidates
+
+- @view_1934_candidates: Review the candidates.
+
+@view_1934_candidates
+new-page: true
+
+= The 1934 Candidates
+
+[? if z_candidate_1934: <b>Zentrum:</b> [+ z_candidate_1934_disp +] ?]
+[? if spd_candidate_1934: <b>SPD:</b> [+ spd_candidate_1934_disp +] ?]
+[? if nsdap_candidate_1934: <b>NSDAP:</b> [+ nsdap_candidate_1934_disp +] ?]
+[? if reactionary_candidate_1934: <b>Right:</b> [+ reactionary_candidate_1934_disp +] ?]
+[? if eckener_available_1934: <b>Unity:</b> Hugo Eckener ?]
+
+- @z_run_candidate: Run [+ z_candidate_1934_disp +] as Zentrum candidate.
+- @z_support_spd: Support SPD candidate ([+ spd_candidate_1934_disp +]).
+- @z_support_eckener: Support Hugo Eckener (unity candidate).
+- @z_support_reactionary: Support Right candidate ([+ reactionary_candidate_1934_disp +]).
+- @z_abstain: Abstain.
+
+@z_run_candidate
+subtitle: Costs 2 resources.
+choose-if: resources >= 2
+on-arrival: {!
+Q.resources -= 2;
+Q.z_campaign_1934 = 1;
+Q.presidential_opinion += 2;
+if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+!}
+go-to: election_1934_result
+
+The Zentrum campaigns for [+ z_candidate_1934_disp +]. The party mobilizes its Catholic base.
+
+@z_support_spd
+on-arrival: {!
+Q.z_support_spd_1934 = 1;
+Q.left_dissent += 5;
+Q.anti_fascist_dissent -= 3;
+Q.presidential_opinion -= 3;
+if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+!}
+go-to: election_1934_result
+
+The Zentrum endorses the SPD's [+ spd_candidate_1934_disp +]. Left and Anti-Fascist factions approve. Hindenburg's circle (and the Right) are displeased.
+
+@z_support_eckener
+choose-if: eckener_available_1934 == 1
+on-arrival: {!
+Q.z_support_eckener_1934 = 1;
+Q.center_strength += 3;
+Q.christian_unity_strength += 2;
+Q.anti_fascist_strength += 2;
+Q.presidential_opinion += 1;
+if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+!}
+unavailable-subtitle: Eckener is not running.
+go-to: election_1934_result
+
+The Zentrum backs Hugo Eckener as a unity candidate. Center, Christian Unity, and Anti-Fascist factions are strengthened.
+
+@z_support_reactionary
+on-arrival: {!
+Q.z_support_reactionary_1934 = 1;
+Q.right_strength += 5;
+Q.barons_strength += 3;
+Q.left_dissent += 10;
+Q.anti_fascist_dissent += 10;
+Q.presidential_opinion += 5;
+if (Q.presidential_opinion > 100) Q.presidential_opinion = 100;
+!}
+go-to: election_1934_result
+
+The Zentrum supports the Right's candidate [+ reactionary_candidate_1934_disp +]. Right and Barons factions gain strength. Left and Anti-Fascists are outraged.
+
+@z_abstain
+on-arrival: {!
+Q.z_abstain_1934 = 1;
+Q.left_dissent += 5;
+Q.center_dissent += 5;
+Q.right_dissent += 5;
+Q.presidential_opinion -= 2;
+if (Q.presidential_opinion < 0) Q.presidential_opinion = 0;
+!}
+go-to: election_1934_result
+
+The Zentrum abstains. All factions are displeased. The Right is mildly relieved.
+
+@election_1934_result
+new-page: true
+on-arrival: {!
+Q.presidential_election_1934_done = 1;
+// Simplified election resolution
+var z_vote = Q.z_votes || 12;
+var spd_vote = Q.spd_votes || 21;
+var kpd_vote = Q.kpd_votes || 13;
+var nsdap_vote = Q.nsdap_votes || 33;
+var right_vote = Q.dnvp_votes + Q.dvp_votes + Q.kvp_votes + Q.other_votes || 10;
+
+// Center/liberal vote split
+var center_vote = Q.ddp_votes + Q.lvp_votes || 4;
+var bvp_vote = Q.bvp_votes || 3;
+
+// Calculate based on endorsements
+var z_support = z_vote;
+var spd_support = spd_vote;
+var nsdap_support = nsdap_vote;
+var right_support = right_vote;
+
+if (Q.z_campaign_1934) {
+    z_support += center_vote * 0.5 + bvp_vote * 0.7;
+} else if (Q.z_support_spd_1934) {
+    spd_support += z_vote * 0.3;
+} else if (Q.z_support_eckener_1934) {
+    // Eckener draws from center, liberals, some right
+    z_support += center_vote * 0.3 + bvp_vote * 0.3;
+    right_support += center_vote * 0.2;
+} else if (Q.z_support_reactionary_1934) {
+    right_support += z_vote * 0.6 + center_vote * 0.3;
+} else {
+    // Abstain - votes scatter
+    spd_support += z_vote * 0.1;
+    right_support += z_vote * 0.1;
+}
+
+// SPD/KPD dynamics
+if (Q.kpd_relation >= 50 && !Q.z_support_spd_1934) {
+    spd_support += kpd_vote * 0.3;
+} else {
+    // KPD voters split: some to SPD, some abstain
+    spd_support += kpd_vote * 0.1;
+}
+
+// Determine winner (round 1 - 50% needed)
+var total = z_support + spd_support + nsdap_support + right_support;
+var winner = "";
+var runoff = 0;
+
+if (nsdap_support / total >= 0.5) { winner = "NSDAP"; }
+else if (spd_support / total >= 0.5) { winner = "SPD"; }
+else if (z_support / total >= 0.5) { winner = "Zentrum"; }
+else if (right_support / total >= 0.5) { winner = "Right"; }
+else { runoff = 1; }
+
+Q.election_1934_winner = winner;
+Q.election_1934_runoff = runoff;
+Q.election_1934_z_pct = Math.round(z_support / total * 100);
+Q.election_1934_spd_pct = Math.round(spd_support / total * 100);
+Q.election_1934_nsdap_pct = Math.round(nsdap_support / total * 100);
+Q.election_1934_right_pct = Math.round(right_support / total * 100);
+!}
+
+= Election 1934 Results
+
+<b>First Round:</b>
+Zentrum: [+ election_1934_z_pct +]%
+SPD: [+ election_1934_spd_pct +]%
+NSDAP: [+ election_1934_nsdap_pct +]%
+Right: [+ election_1934_right_pct +]%
+
+[? if election_1934_runoff == 1: No candidate achieved 50%. A runoff will be held. ?]
+[? if election_1934_winner == "NSDAP": <span style="color: #7A3C00;">The NSDAP wins the presidency. The Republic falls.</span> ?]
+[? if election_1934_winner == "SPD": The SPD wins the presidency. A democratic president at last. ?]
+[? if election_1934_winner == "Zentrum": The Zentrum wins the presidency. [+ z_candidate_1934_disp +] becomes President. ?]
+[? if election_1934_winner == "Right": The Right wins the presidency. [+ reactionary_candidate_1934_disp +] becomes President. ?]
+
+[? if election_1934_runoff == 1:
+- @election_1934_runoff: Proceed to runoff.
+?]
+[? if election_1934_runoff == 0 and election_1934_winner == "Zentrum":
+- @z_wins_1934_round1: Zentrum victory in first round.
+?]
+[? if election_1934_runoff == 0 and election_1934_winner == "SPD":
+- @game_over_1934: Continue to game resolution.
+?]
+[? if election_1934_runoff == 0 and election_1934_winner == "NSDAP":
+- @game_over_1934: Continue to game resolution.
+?]
+[? if election_1934_runoff == 0 and election_1934_winner == "Right":
+- @game_over_1934: Continue to game resolution.
+?]
+
+@election_1934_runoff
+new-page: true
+on-arrival: {!
+// Runoff: top two candidates
+// Simplified: NSDAP vs whoever is second
+var candidates = [
+    {name: "NSDAP", votes: Q.election_1934_nsdap_pct, key: "NSDAP"},
+    {name: "SPD", votes: Q.election_1934_spd_pct, key: "SPD"},
+    {name: "Zentrum", votes: Q.election_1934_z_pct, key: "Zentrum"},
+    {name: "Right", votes: Q.election_1934_right_pct, key: "Right"}
+];
+candidates.sort((a,b) => b.votes - a.votes);
+var first = candidates[0];
+var second = candidates[1];
+
+// Runoff dynamics: democratic parties unite against NSDAP
+var first_votes = first.votes;
+var second_votes = second.votes;
+
+if (first.key == "NSDAP") {
+    // NSDAP vs democratic candidate
+    if (second.key == "SPD") {
+        second_votes += Q.election_1934_z_pct * 0.8 + Q.election_1934_right_pct * 0.1;
+    } else if (second.key == "Zentrum") {
+        second_votes += Q.election_1934_spd_pct * 0.7 + Q.election_1934_right_pct * 0.2;
+    } else if (second.key == "Right") {
+        second_votes += Q.election_1934_spd_pct * 0.1 + Q.election_1934_z_pct * 0.3;
+    }
+} else if (second.key == "NSDAP") {
+    // Democratic candidate vs NSDAP
+    if (first.key == "SPD") {
+        first_votes += Q.election_1934_z_pct * 0.8 + Q.election_1934_right_pct * 0.1;
+    } else if (first.key == "Zentrum") {
+        first_votes += Q.election_1934_spd_pct * 0.7 + Q.election_1934_right_pct * 0.2;
+    } else if (first.key == "Right") {
+        first_votes += Q.election_1934_spd_pct * 0.1 + Q.election_1934_z_pct * 0.3;
+    }
+} else {
+    // Two democratic candidates - unlikely but handle
+    first_votes += second_votes * 0.5;
+}
+
+var total_runoff = first_votes + second_votes;
+var runoff_winner = (first_votes > second_votes) ? first.key : second.key;
+
+Q.election_1934_runoff_winner = runoff_winner;
+Q.election_1934_runoff_first_pct = Math.round(first_votes / total_runoff * 100);
+Q.election_1934_runoff_second_pct = Math.round(second_votes / total_runoff * 100);
+Q.runoff_first_name = first.name;
+Q.runoff_second_name = second.name;
+!}
+
+= Election 1934 Runoff
+
+<b>Runoff:</b> [+ runoff_first_name +] vs [+ runoff_second_name +]
+
+[+ runoff_first_name +]: [+ election_1934_runoff_first_pct +]%
+[+ runoff_second_name +]: [+ election_1934_runoff_second_pct +]%
+
+[? if election_1934_runoff_winner == "NSDAP": <span style="color: #7A3C00;">The NSDAP wins the runoff. Adolf Hitler (or proxy) becomes President. The Republic is doomed.</span> ?]
+[? if election_1934_runoff_winner == "SPD": The SPD wins the runoff. Otto Braun becomes President. Democracy survives. ?]
+[? if election_1934_runoff_winner == "Zentrum": The Zentrum wins the runoff. [+ z_candidate_1934_disp +] becomes President. A Catholic Chancellor-President era begins. ?]
+[? if election_1934_runoff_winner == "Right": The Right wins the runoff. [+ reactionary_candidate_1934_disp +] becomes President. Authoritarian rule deepens. ?]
+
+[? if election_1934_runoff_winner == "Zentrum":
+- @z_wins_1934_runoff: Zentrum victory in runoff.
+?]
+[? if election_1934_runoff_winner != "Zentrum":
+- @game_over_1934: Continue to game resolution.
+?]
+
+@z_wins_1934_runoff
+new-page: true
+on-arrival: {!
+Q.president = Q.z_candidate_1934;
+Q.presidential_election_1934_done = 1;
+if (Q.z_candidate_1934 == "Adenauer") Q.achievement_adenauer_president = 1;
+if (Q.z_candidate_1934 == "Marx") Q.achievement_marx_president = 1;
+if (Q.z_candidate_1934 == "Stegerwald") Q.achievement_stegerwald_president = 1;
+if (Q.z_candidate_1934 == "Kaas") Q.achievement_kaas_president = 1;
+!}
+go-to: game_over
+
+@z_wins_1934_round1
+new-page: true
+on-arrival: {!
+Q.president = Q.z_candidate_1934;
+Q.presidential_election_1934_done = 1;
+if (Q.z_candidate_1934 == "Adenauer") Q.achievement_adenauer_president = 1;
+if (Q.z_candidate_1934 == "Marx") Q.achievement_marx_president = 1;
+if (Q.z_candidate_1934 == "Stegerwald") Q.achievement_stegerwald_president = 1;
+if (Q.z_candidate_1934 == "Kaas") Q.achievement_kaas_president = 1;
+!}
+go-to: game_over
+
+@game_over_1934
+go-to: game_over

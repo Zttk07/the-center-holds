@@ -1,0 +1,48 @@
+title: Faction Detail
+new-page: true
+tags: party_affairs
+view-if: party_affairs_timer <= 0
+on-arrival: month_actions += 1; party_affairs_timer = 4;
+
+= Faction Balance Overview
+
+**Left Faction** (Marx, Fehrenbach, Wirth)
+Strength: [+ left_strength +] ([+ left_strength +])
+Dissent: [+ left_dissent +] ([+ left_dissent +])
+[? if left_leaders_resigned: <span style="color:#8B0000;">LEADERS RESIGNED</span> ?]
+
+**Center Faction** (Guérard, Hermes, Bell)
+Strength: [+ center_strength +] ([+ center_strength +])
+Dissent: [+ center_dissent +] ([+ center_dissent +])
+[? if center_leaders_resigned: <span style="color:#8B0000;">LEADERS RESIGNED</span> ?]
+
+**Right Faction** (Bracht, Kaas, Brüning)
+Strength: [+ right_strength +] ([+ right_strength +])
+Dissent: [+ right_dissent +] ([+ right_dissent +])
+[? if right_wing_left: <span style="color:#8B0000;">RIGHT WING LEFT PARTY</span> ?]
+
+**Christian Unity Faction** (Adenauer, Spiecker, Stegerwald)
+Strength: [+ christian_unity_strength +] ([+ christian_unity_strength +])
+Dissent: [+ christian_unity_dissent +] ([+ christian_unity_dissent +])
+[? if christian_unity_left: <span style="color:#8B0000;">LEFT PARTY (CDU formed)</span> ?]
+
+**Anti-Fascist Faction** (Moenius, Hundhammer, Klausener)
+Strength: [+ anti_fascist_strength +] ([+ anti_fascist_strength +])
+Dissent: [+ anti_fascist_dissent +] ([+ anti_fascist_dissent +])
+[? if anti_fascist_available: <span style="color:#006400;">UNLOCKED</span> ?][? if not anti_fascist_available: <span style="color:#808080;">LOCKED</span> (requires BVP Aligned+ and not far-right coalition) ?]
+[? if anti_fascists_left: <span style="color:#8B0000;">LEFT PARTY</span> ?]
+
+**Barons Faction** (Papen, Schleicher, Krosigk, Eltz-Rübenach)
+Strength: [+ barons_strength +] ([+ barons_strength +])
+Dissent: [+ barons_dissent +] ([+ barons_dissent +])
+Papen: [? if papen_recruited: <span style="color:#008000;">RECRUITED</span> ?][? if not papen_recruited: <span style="color:#808080;">Available</span> ?]
+Schleicher: [? if schleicher_recruited: <span style="color:#008000;">RECRUITED</span> ?][? if not schleicher_recruited: <span style="color:#808080;">Locked</span> (Reichswehr investment >= 3) ?]
+Krosigk: [? if krosigk_recruited: <span style="color:#008000;">RECRUITED</span> ?][? if not krosigk_recruited: <span style="color:#808080;">Available</span> ?]
+Eltz-Rübenach: [? if eltz_rubenach_recruited: <span style="color:#008000;">RECRUITED</span> ?][? if not eltz_rubenach_recruited: <span style="color:#808080;">Available</span> ?]
+
+Current Coalition Type: [+ coalition_type +] ([? if coalition_type == 'volksfront' or coalition_type == 'weimarer': <span style="color:#c00000;">Strengthens Left & Anti-Fascist</span> ?][? if coalition_type == 'groko' or coalition_type == 'verfassungs' or coalition_type == 'mittel' or coalition_type == 'bourgeois': <span style="color:#888888;">Strengthens Center & Anti-Fascist</span> ?][? if coalition_type == 'mittel_recht' or coalition_type == 'gross_mittel_recht' or coalition_type == 'recht' or coalition_type == 'schwarz_braun': <span style="color:#3A7ACC;">Strengthens Right</span> ?][? if coalition_type == 'none': <span style="color:#808080;">No coalition</span> ?])
+
+Out-of-Government Malus: [+ out_of_government_malus +] [? if out_of_government_malus > 0: <span style="color:#8B0000;">(Impairs all actions)</span> ?]
+
+- @z_party_hub: Return to Party Affairs
+- @easy_discard

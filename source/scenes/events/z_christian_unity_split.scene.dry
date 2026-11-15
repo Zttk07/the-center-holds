@@ -1,0 +1,78 @@
+title: Christian Unity Faction Forms CDU
+new-page: true
+subtitle: The Christian Unity faction leaves to form a non-denominational Christian Democratic Union.
+tags: event
+view-if: christian_unity_dissent >= 60 and not christian_unity_left and z_christian_unity_split_timer = 0
+on-arrival: {!
+Q.christian_unity_left = 1;
+Q.cdu_formed = 1;
+Q.z_christian_unity_split_timer = 4;
+
+if (Q.christian_unity_strength < 10) {
+    Q.catholics_z -= 3;
+    Q.rural_z -= 2;
+    Q.catholics_cdu = (Q.catholics_cdu || 0) + 3;
+    Q.rural_cdu = (Q.rural_cdu || 0) + 2;
+    Q.new_middle_cdu = (Q.new_middle_cdu || 0) + 2;
+} else if (Q.christian_unity_strength < 25) {
+    Q.catholics_z -= 4;
+    Q.rural_z -= 3;
+    Q.new_middle_z -= 2;
+    Q.catholics_cdu = (Q.catholics_cdu || 0) + 4;
+    Q.rural_cdu = (Q.rural_cdu || 0) + 3;
+    Q.new_middle_cdu = (Q.new_middle_cdu || 0) + 3;
+    Q.old_middle_cdu = (Q.old_middle_cdu || 0) + 2;
+} else if (Q.christian_unity_strength < 40) {
+    Q.catholics_z -= 5;
+    Q.rural_z -= 4;
+    Q.new_middle_z -= 3;
+    Q.old_middle_z -= 2;
+    Q.catholics_cdu = (Q.catholics_cdu || 0) + 5;
+    Q.rural_cdu = (Q.rural_cdu || 0) + 4;
+    Q.new_middle_cdu = (Q.new_middle_cdu || 0) + 4;
+    Q.old_middle_cdu = (Q.old_middle_cdu || 0) + 3;
+} else if (Q.christian_unity_strength < 60) {
+    Q.catholics_z -= 6;
+    Q.rural_z -= 5;
+    Q.new_middle_z -= 4;
+    Q.old_middle_z -= 3;
+    Q.catholics_cdu = (Q.catholics_cdu || 0) + 6;
+    Q.rural_cdu = (Q.rural_cdu || 0) + 5;
+    Q.new_middle_cdu = (Q.new_middle_cdu || 0) + 5;
+    Q.old_middle_cdu = (Q.old_middle_cdu || 0) + 4;
+} else {
+    Q.catholics_z -= 8;
+    Q.rural_z -= 6;
+    Q.new_middle_z -= 5;
+    Q.old_middle_z -= 4;
+    Q.unemployed_z -= 2;
+    Q.catholics_cdu = (Q.catholics_cdu || 0) + 8;
+    Q.rural_cdu = (Q.rural_cdu || 0) + 6;
+    Q.new_middle_cdu = (Q.new_middle_cdu || 0) + 6;
+    Q.old_middle_cdu = (Q.old_middle_cdu || 0) + 5;
+}
+
+Q.bvp_relations -= 20;
+if (Q.bvp_relations < 0) Q.bvp_relations = 0;
+Q.z_relation -= 5;
+Q.dvp_relation += 5;
+Q.ddp_relation += 3;
+
+Q.christian_unity_strength = Q.christian_unity_strength * 0.3;
+
+Q.n_advisors_start = Q.n_advisors;
+if (Q.adenauer_advisor == 1) Q.n_advisors -= 1;
+Q.adenauer_advisor = 0;
+if (Q.spiecker_advisor == 1) Q.n_advisors -= 1;
+Q.spiecker_advisor = 0;
+if (Q.stegerwald_advisor == 1) Q.n_advisors -= 1;
+Q.stegerwald_advisor = 0;
+if (Q.n_advisors < Q.n_advisors_start) Q.shuffle_leadership_timer = 0;
+!}
+max-visits: 1
+
+= Christian Unity faction forms the CDU
+
+The Christian Unity faction, led by Adenauer, Spiecker, and Stegerwald, has left the party to found the <span style="color: #006400;">**Christian Democratic Union (CDU)**</span> — a non-denominational Christian party open to Protestants. They argue that the confessional Zentrum is an anachronism and that only a cross-confessional Christian party can save Germany from polarization.
+
+The BVP is outraged, viewing this as a betrayal of Catholic particularity. The DVP and DDP, however, welcome a potential bourgeois coalition partner.

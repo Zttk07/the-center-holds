@@ -1,0 +1,7 @@
+# Out-of-Government Malus
+
+(0..10) <span style="color: #5B9A8D;">Minimal</span>
+(10..30) <span style="color: #C4B156;">Moderate</span>
+(30..50) <span style="color: #A05252;">Significant</span>
+(50..70) <span style="color: #8B0000;">Severe</span>
+(70..100) <span style="color: #8B0000;">Crippling</span>

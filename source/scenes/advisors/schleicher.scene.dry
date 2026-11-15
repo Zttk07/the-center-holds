@@ -1,0 +1,38 @@
+title: Kurt von Schleicher
+new-page: true
+view-if: reichswehr_investment >= 3 or schleicher_recruited == 1
+tags: advisor
+choose-if: advisor_action_timer <= 0 and (not schleicher_recruited or schleicher_recruited == 1)
+unavailable-subtitle: [? if advisor_action_timer > 0: [+ advisor_action_timer +] months until next advisor action. ?][? if reichswehr_investment < 3: Requires Reichswehr Investment >= 3. ?][? if schleicher_recruited > 1: Already used this month. ?]
+card-image: img/portraits/SchleicherKurt.jpg
+on-arrival: {!
+if (!Q.schleicher_recruited) {
+    Q.schleicher_recruited = 1;
+    Q.barons_strength += 15;
+    Q.barons_dissent -= 5;
+    Q.reichswehr_loyalty += 0.15;
+    if (Q.reichswehr_loyalty > 1) Q.reichswehr_loyalty = 1;
+    Q.presidential_opinion += 3;
+    Q.left_strength -= 2;
+    Q.left_dissent += 5;
+    Q.anti_fascist_dissent += 5;
+    Q.z_schleicher_result = "General Schleicher enters the political arena. The Grey Eminence of the Reichswehr brings military backing and presidential access. The Barons faction swells. Barons strength +15, Barons dissent -5, Reichswehr Loyalty +15%, Presidential Opinion +3, Left Strength -2, Left Dissent +5, Anti-Fascist Dissent +5. Warning: Schleicher dreams of a taming of the Nazis through presidential authoritarianism. He is not a democrat.";
+} else {
+    Q.advisor_action_timer = 6;
+    Q.schleicher_recruited = 2;
+    Q.reichswehr_loyalty += 0.05;
+    if (Q.reichswehr_loyalty > 1) Q.reichswehr_loyalty = 1;
+    Q.presidential_opinion += 2;
+    Q.kpd_relation -= 2;
+    Q.z_schleicher_result = "Schleicher briefs you on military and presidential matters. The Reichswehr's political department is at your disposal. Reichswehr Loyalty +5%, Presidential Opinion +2, KPD Relations -2. Schleicher's monocle glints. 'The street belongs to those who control the barracks, Herr Minister.'";
+}
+!}
+go-to: z_schleicher_event
+
+@z_schleicher_event
+title: Schleicher Consultation
+new-page: true
+
+{! Q.z_schleicher_result !}
+
+- @z_advisors_hub: Return to Advisors

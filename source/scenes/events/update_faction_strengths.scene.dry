@@ -1,0 +1,109 @@
+title: Update Faction Strengths
+new-page: true
+on-arrival: {!
+// Update faction strengths based on coalition type
+// This is called whenever a coalition is formed or changed
+
+var coalition = Q.coalition_type || 'none';
+
+switch (coalition) {
+    case 'volksfront':
+        // KPD-SPD-DDP-Z(-BVP) - Strengthens Left and Anti-Fascist
+        Q.left_strength = Math.min(100, (Q.left_strength || 0) + 3);
+        Q.anti_fascist_strength = Math.min(100, (Q.anti_fascist_strength || 0) + 2);
+        Q.left_dissent = Math.max(0, (Q.left_dissent || 0) - 2);
+        Q.anti_fascist_dissent = Math.max(0, (Q.anti_fascist_dissent || 0) - 2);
+        Q.right_strength = Math.max(0, (Q.right_strength || 0) - 1);
+        Q.right_dissent = Math.min(100, (Q.right_dissent || 0) + 2);
+        break;
+    case 'weimarer':
+        // SPD-DDP-Z(-BVP) - Strengthens Left and Anti-Fascist
+        Q.left_strength = Math.min(100, (Q.left_strength || 0) + 3);
+        Q.anti_fascist_strength = Math.min(100, (Q.anti_fascist_strength || 0) + 2);
+        Q.left_dissent = Math.max(0, (Q.left_dissent || 0) - 2);
+        Q.anti_fascist_dissent = Math.max(0, (Q.anti_fascist_dissent || 0) - 2);
+        Q.right_strength = Math.max(0, (Q.right_strength || 0) - 1);
+        Q.right_dissent = Math.min(100, (Q.right_dissent || 0) + 2);
+        break;
+    case 'groko':
+        // SPD-DDP-Z-BVP-DVP - Strengthens Center and Anti-Fascist
+        Q.center_strength = Math.min(100, (Q.center_strength || 0) + 3);
+        Q.anti_fascist_strength = Math.min(100, (Q.anti_fascist_strength || 0) + 2);
+        Q.center_dissent = Math.max(0, (Q.center_dissent || 0) - 2);
+        Q.anti_fascist_dissent = Math.max(0, (Q.anti_fascist_dissent || 0) - 2);
+        break;
+    case 'verfassungs':
+        // SPD-DDP-Z-BVP-DVP-Others - Strengthens Center and Anti-Fascist
+        Q.center_strength = Math.min(100, (Q.center_strength || 0) + 3);
+        Q.anti_fascist_strength = Math.min(100, (Q.anti_fascist_strength || 0) + 2);
+        Q.center_dissent = Math.max(0, (Q.center_dissent || 0) - 2);
+        Q.anti_fascist_dissent = Math.max(0, (Q.anti_fascist_dissent || 0) - 2);
+        break;
+    case 'mittel':
+    case 'bourgeois':
+        // DDP-Z-BVP-DVP(-Others) - Strengthens Center and Anti-Fascist
+        Q.center_strength = Math.min(100, (Q.center_strength || 0) + 3);
+        Q.anti_fascist_strength = Math.min(100, (Q.anti_fascist_strength || 0) + 1);
+        Q.christian_unity_strength = Math.min(100, (Q.christian_unity_strength || 0) + 1);
+        Q.center_dissent = Math.max(0, (Q.center_dissent || 0) - 2);
+        Q.anti_fascist_dissent = Math.max(0, (Q.anti_fascist_dissent || 0) - 1);
+        break;
+    case 'mittel_recht':
+        // Z-BVP-DVP-Others - Strengthens Right
+        Q.right_strength = Math.min(100, (Q.right_strength || 0) + 3);
+        Q.center_strength = Math.max(0, (Q.center_strength || 0) - 1);
+        Q.left_strength = Math.max(0, (Q.left_strength || 0) - 1);
+        Q.anti_fascist_strength = Math.max(0, (Q.anti_fascist_strength || 0) - 1);
+        Q.right_dissent = Math.max(0, (Q.right_dissent || 0) - 2);
+        Q.left_dissent = Math.min(100, (Q.left_dissent || 0) + 2);
+        Q.anti_fascist_dissent = Math.min(100, (Q.anti_fascist_dissent || 0) + 2);
+        break;
+    case 'gross_mittel_recht':
+    case 'recht':
+        // DDP-Z-BVP-DVP-Others-DNVP / Z-BVP-DVP-Others-DNVP - Strengthens Right
+        Q.right_strength = Math.min(100, (Q.right_strength || 0) + 4);
+        Q.center_strength = Math.max(0, (Q.center_strength || 0) - 2);
+        Q.left_strength = Math.max(0, (Q.left_strength || 0) - 2);
+        Q.anti_fascist_strength = Math.max(0, (Q.anti_fascist_strength || 0) - 2);
+        Q.right_dissent = Math.max(0, (Q.right_dissent || 0) - 3);
+        Q.left_dissent = Math.min(100, (Q.left_dissent || 0) + 3);
+        Q.anti_fascist_dissent = Math.min(100, (Q.anti_fascist_dissent || 0) + 3);
+        break;
+    case 'schwarz_braun':
+        // Z(-BVP)-DNVP-NSDAP - Strengthens Right heavily
+        Q.right_strength = Math.min(100, (Q.right_strength || 0) + 5);
+        Q.center_strength = Math.max(0, (Q.center_strength || 0) - 3);
+        Q.left_strength = Math.max(0, (Q.left_strength || 0) - 3);
+        Q.anti_fascist_strength = Math.max(0, (Q.anti_fascist_strength || 0) - 3);
+        Q.right_dissent = Math.max(0, (Q.right_dissent || 0) - 3);
+        Q.left_dissent = Math.min(100, (Q.left_dissent || 0) + 5);
+        Q.anti_fascist_dissent = Math.min(100, (Q.anti_fascist_dissent || 0) + 5);
+        break;
+    case 'none':
+    default:
+        // No coalition - slight decay toward center
+        Q.left_strength = Math.max(5, (Q.left_strength || 0) - 1);
+        Q.right_strength = Math.max(5, (Q.right_strength || 0) - 1);
+        Q.center_strength = Math.min(50, (Q.center_strength || 0) + 1);
+        Q.christian_unity_strength = Math.max(5, (Q.christian_unity_strength || 0) - 0.5);
+        Q.anti_fascist_strength = Math.max(2, (Q.anti_fascist_strength || 0) - 0.5);
+        Q.barons_strength = Math.max(0, (Q.barons_strength || 0) - 0.5);
+        break;
+}
+
+// Ensure all values stay in bounds
+Q.left_strength = Math.max(0, Math.min(100, Q.left_strength || 0));
+Q.right_strength = Math.max(0, Math.min(100, Q.right_strength || 0));
+Q.center_strength = Math.max(0, Math.min(100, Q.center_strength || 0));
+Q.christian_unity_strength = Math.max(0, Math.min(100, Q.christian_unity_strength || 0));
+Q.anti_fascist_strength = Math.max(0, Math.min(100, Q.anti_fascist_strength || 0));
+Q.barons_strength = Math.max(0, Math.min(100, Q.barons_strength || 0));
+
+Q.left_dissent = Math.max(0, Math.min(100, Q.left_dissent || 0));
+Q.right_dissent = Math.max(0, Math.min(100, Q.right_dissent || 0));
+Q.center_dissent = Math.max(0, Math.min(100, Q.center_dissent || 0));
+Q.christian_unity_dissent = Math.max(0, Math.min(100, Q.christian_unity_dissent || 0));
+Q.anti_fascist_dissent = Math.max(0, Math.min(100, Q.anti_fascist_dissent || 0));
+Q.barons_dissent = Math.max(0, Math.min(100, Q.barons_dissent || 0));
+!}
+go-to: post_event

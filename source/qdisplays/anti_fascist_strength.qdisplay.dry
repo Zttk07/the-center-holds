@@ -1,0 +1,7 @@
+# Anti-Fascist Faction Strength
+
+(0..5) <span style="color:#1A4A1A;">negligible</span>
+(6..15) <span style="color:#2A6A2A;">weak</span>
+(16..30) <span style="color:#3A8A3A;">moderate</span>
+(31..50) <span style="color:#4AAA4A;">strong</span>
+(51..100) <span style="color:#5ACA5A;">dominant</span>
