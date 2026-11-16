@@ -1,9 +1,8 @@
-const elements = document.querySelectorAll('header, #content, footer');
-elements.forEach(el => {
-  el.style.maxWidth = '540px';
-});
-!}
-set-bg: img/map_2.jpg
+title: Ending Slides
+new-page: true
+
+@go_back
+title: Back to main menu.
 go-to: game_over.eg_menu
 
 @go_back_2

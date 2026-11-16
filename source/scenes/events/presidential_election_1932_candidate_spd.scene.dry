@@ -22,6 +22,14 @@ The <span style="color: #C0A054;">**DVP**</span> leadership has formally decline
 - @convince_dvp_fail_eckener: Proceed with our own candidate.
 - @support_hindenburg: Support Hindenburg instead.
 
+@support_hindenburg
+on-arrival: {!
+Q.z_support_reactionary = 1;
+Q.z_choice = "Hindenburg";
+Q.presidential_opinion -= 10;
+!}
+go-to: candidate_selection
+
 @candidate_selection
 title: Choose our presidential strategy.
 

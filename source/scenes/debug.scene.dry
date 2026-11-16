@@ -25,6 +25,9 @@ go-to: main
 - @set_factions: Set up Zentrum factions
 - @back: Back
 
+@back
+go-to: main
+
 @set_1932
 on-arrival: {!
 Q.year = 1932;
@@ -99,7 +102,10 @@ go-to: main
 - @force_round1: Force Round 1
 - @force_round2: Force Round 2
 - @force_1934: Force 1934 election
-- @back: Back
+- @back_force: Back
+
+@back_force
+go-to: main
 
 @force_hindenburg
 on-arrival: {!
@@ -151,7 +157,10 @@ go-to: main
 - @test_stegerwald_win: Test Stegerwald victory path
 - @test_kaas_win: Test Kaas victory path
 - @test_adenauer_win: Test Adenauer victory path (1934)
-- @back: Back
+- @back_test: Back
+
+@back_test
+go-to: main
 
 @test_marx_win
 on-arrival: {!

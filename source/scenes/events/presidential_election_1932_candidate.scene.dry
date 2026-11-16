@@ -56,7 +56,7 @@ We launch a presidential campaign with [+ z_candidate_1932_disp +] as our candid
 The BVP views our candidacy positively, seeing it as a defense of Catholic interests. [? if hindenburg_run: Hindenburg is privately annoyed—he had hoped the Zentrum would fall in line behind him. ?]
 
 - @z_endorsements: Scout out potential endorsements for our candidate.
-- @candidate_selection: Reconsider our choice.
+- @run_z_candidate: Reconsider our choice.
 
 @z_endorsements
 on-arrival: {!
