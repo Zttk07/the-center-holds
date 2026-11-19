@@ -1,10 +1,7 @@
 title: Zentrum Advisors
 new-page: true
-is-card: true
-tags: advisor
 view-if: advisor_timer <= 0
 on-arrival: month_actions += 1; advisor_timer = 6;
-card-image: img/portraits/PapenFranz.jpg
 
 = Zentrum Advisors
 
@@ -22,6 +19,7 @@ Key figures from the "Barons" faction and the old conservative elite offer their
 - @easy_discard
 
 @z_advisor_papen
+is-pinned-card: true
 title: Franz von Papen
 subtitle: [? if papen_recruited: <span style="color: #008000;">Recruited</span> ?][? if not papen_recruited: <span style="color: #808080;">Available</span> - Nobleman, former Chancellor, Hindenburg confidant ?]
 view-if: not papen_recruited or papen_recruited == 1
@@ -60,6 +58,8 @@ new-page: true
 - @z_advisors_hub: Return to Advisors
 
 @z_advisor_schleicher
+is-pinned-card: true
+tags: advisor
 title: Kurt von Schleicher
 subtitle: [? if schleicher_recruited: <span style="color: #008000;">Recruited</span> ?][? if not schleicher_recruited: <span style="color: #808080;">Locked</span> - Requires Reichswehr Investment >= 3 ?]
 view-if: reichswehr_investment >= 3 or schleicher_recruited == 1
@@ -99,6 +99,8 @@ new-page: true
 - @z_advisors_hub: Return to Advisors
 
 @z_advisor_krosigk
+is-pinned-card: true
+tags: advisor
 title: Lutz Graf Schwerin von Krosigk
 subtitle: [? if krosigk_recruited: <span style="color: #008000;">Recruited</span> ?][? if not krosigk_recruited: <span style="color: #808080;">Available</span> - Expert bureaucrat, financial conservative ?]
 view-if: not krosigk_recruited or krosigk_recruited == 1
@@ -136,6 +138,8 @@ new-page: true
 - @z_advisors_hub: Return to Advisors
 
 @z_advisor_eltz_rubenach
+is-pinned-card: true
+tags: advisor
 title: Paul von Eltz-Rübenach
 subtitle: [? if eltz_rubenach_recruited: <span style="color: #008000;">Recruited</span> ?][? if not eltz_rubenach_recruited: <span style="color: #808080;">Available</span> - Postmaster General, Catholic aristocrat, technocrat ?]
 view-if: not eltz_rubenach_recruited or eltz_rubenach_recruited == 1
@@ -174,6 +178,8 @@ new-page: true
 - @z_advisors_hub: Return to Advisors
 
 @z_advisor_moenius
+is-pinned-card: true
+tags: advisor
 title: Bernhard Moenius
 subtitle: [? if moenius_recruited: <span style="color: #008000;">Recruited</span> ?][? if not moenius_recruited: <span style="color: #808080;">Available</span> - Anti-Fascist leader, Catholic workers' press editor ?]
 view-if: bvp_integration >= 1 and anti_fascist_available and (not moenius_recruited or moenius_recruited == 1)
@@ -213,6 +219,8 @@ new-page: true
 - @z_advisors_hub: Return to Advisors
 
 @z_advisor_hundhammer
+is-pinned-card: true
+tags: advisor
 title: Ferdinand Hundhammer
 subtitle: [? if hundhammer_recruited: <span style="color: #008000;">Recruited</span> ?][? if not hundhammer_recruited: <span style="color: #808080;">Available</span> - Bavarian Catholic trade unionist, CSU co-founder ?]
 view-if: bvp_integration >= 1 and anti_fascist_available and (not hundhammer_recruited or hundhammer_recruited == 1)
@@ -254,6 +262,8 @@ new-page: true
 - @z_advisors_hub: Return to Advisors
 
 @z_advisor_klausener
+is-pinned-card: true
+tags: advisor
 title: Fritz Klausener
 subtitle: [? if klausener_recruited: <span style="color: #008000;">Recruited</span> ?][? if not klausener_recruited: <span style="color: #808080;">Available</span> - Catholic youth leader, KAB secretary ?]
 view-if: bvp_integration >= 1 and anti_fascist_available and (not klausener_recruited or klausener_recruited == 1)

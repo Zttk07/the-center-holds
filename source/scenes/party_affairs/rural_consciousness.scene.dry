@@ -2,7 +2,7 @@ title: Class Consciousness of the Peasantry and the Rural Working Class
 new-page: true
 is-card: true
 tags: party_affairs
-view-if: socialism >= 51 and rural_spd_normalized >= 15 and rural_policy >= 1
+view-if: player_party != 'z' and socialism >= 51 and rural_spd_normalized >= 15 and rural_policy >= 1
 on-arrival: month_actions += 0
 card-image: img/rural-conscious.jpg
 face-image: img/rural-conscious.jpg

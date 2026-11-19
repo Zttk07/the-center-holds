@@ -1,0 +1,78 @@
+=== QA PLAYTEST: 8 seeds x up to 12000 steps on out/game.json ===
+
+seed 1: steps=1084 reached=1937-12 GAME OVER @1937-12 (game_over.end_game)
+seed 2: steps=510 reached=1932-4 GAME OVER @1932-4 (game_over.end_game)
+seed 3: steps=972 reached=1934-8 GAME OVER @1934-8 (game_over.end_game)
+seed 4: steps=559 reached=1932-4 GAME OVER @1932-4 (game_over.end_game)
+seed 5: steps=45 reached=1928-2 FATAL
+   FATAL: {"scene":"z_party_hub","date":"1928-2","msg":"Maximum call stack size exceeded","stack":"    at DendryEngine.__changeScene (C:\\Users\\zotti\\Downloads\\uhhh\\dynamic_social_democracy-main\\node_modules\\dendrynexus\\lib\\engine.js:865:50) |     at DendryEngine.__changeScene (C:\\Users\\zotti\\Downloads\\uhhh\\dynamic_social_democracy-main\\node_modules\\dendrynexus\\lib\\engine.js:865:50)"}
+seed 6: steps=51 reached=1928-4 FATAL
+   FATAL: {"scene":"z_party_hub","date":"1928-4","msg":"Maximum call stack size exceeded","stack":"    at DendryEngine._makeDisplayContent (C:\\Users\\zotti\\Downloads\\uhhh\\dynamic_social_democracy-main\\node_modules\\dendrynexus\\lib\\engine.js:764:56) |     at DendryEngine.displaySceneContent (C:\\Users\\zotti\\Downloads\\uhhh\\dynamic_social_democracy-main\\node_modules\\dendrynexus\\lib\\engine.js:764:56)"}
+seed 7: steps=1061 reached=1935-12 GAME OVER @1935-12 (game_over.end_game)
+seed 8: steps=9 reached=1928-1 FATAL
+   FATAL: {"scene":"z_party_hub","date":"1928-1","msg":"Maximum call stack size exceeded","stack":"    at DendryEngine._makeDisplayContent (C:\\Users\\zotti\\Downloads\\uhhh\\dynamic_social_democracy-main\\node_modules\\dendrynexus\\lib\\engine.js:764:56) |     at DendryEngine.displaySceneContent (C:\\Users\\zotti\\Downloads\\uhhh\\dynamic_social_democracy-main\\node_modules\\dendrynexus\\lib\\engine.js:764:56)"}
+
+--- SWALLOWED RUNTIME ERRORS (scene :: message) -- 17 distinct ---
+   35x seeds=5 first=1931-7  workers_aid_unpopularity :: labor_strength is not defined
+   23x seeds=5 first=1928-3  shuffle_leadership.rm_main_menu :: Cannot read properties of undefined (reading 'length')
+   20x seeds=5 first=1928-5  election_1928 :: center_right_coalition is not defined
+   14x seeds=3 first=1932-5  election_1928.coalition_menu :: no_majority_elections is not defined
+   10x seeds=6 first=1934-1  shuffle_leadership.advisor_menu :: Cannot read properties of undefined (reading 'length')
+    8x seeds=2 first=1933-3  election_1928.coalition_menu :: no_majority_bruning_elections is not defined
+    4x seeds=2 first=1934-6  local_election_saxony_1933 :: saxony_adjustment is not defined
+    2x seeds=2 first=1928-5  election_1928.right_coalition :: dvp_relation is not defined
+    2x seeds=2 first=1928-5  election_1928.coalition_menu :: dvp_relation is not defined
+    2x seeds=2 first=1928-5  election_1928.grand_coalition_spd_lead :: reformist_dissent is not defined
+    1x seeds=1 first=1928-5  election_1928.right_coalition :: year is not defined
+    1x seeds=1 first=1928-5  election_1928.right_coalition :: lvp_formed is not defined
+    1x seeds=1 first=1928-5  election_1928.braun_2 :: in_weimar_coalition is not defined
+    1x seeds=1 first=1928-5  election_1928.grand_coalition_spd_lead :: in_weimar_coalition is not defined
+    1x seeds=1 first=1928-5  election_1928.no_govt :: in_weimar_coalition is not defined
+    1x seeds=1 first=1928-5  election_1928.no_govt :: left_dissent is not defined
+    1x seeds=1 first=1935-5  election_1928.coalition_menu :: nsdap_chancellor is not defined
+
+--- QUALITIES THAT BECAME NaN/Infinity -- 70 ---
+  labor_dissent  (first seen in post_event.events_choice @1928-2)
+  reformist_dissent  (first seen in post_event.events_choice @1928-2)
+  reformist_strength  (first seen in post_event.events_choice @1928-2)
+  workers_nsdap_difference  (first seen in post_event.events_choice @1928-2)
+  new_middle_nsdap_difference  (first seen in post_event.events_choice @1928-2)
+  old_middle_nsdap_difference  (first seen in post_event.events_choice @1928-2)
+  rural_nsdap_difference  (first seen in post_event.events_choice @1928-2)
+  unemployed_nsdap_difference  (first seen in post_event.events_choice @1928-2)
+  catholics_nsdap_difference  (first seen in post_event.events_choice @1928-2)
+  workers_change_spd_display  (first seen in election_1928.coalition_menu @1928-5)
+  old_middle_change_spd_display  (first seen in election_1928.coalition_menu @1928-5)
+  new_middle_change_spd_display  (first seen in election_1928.coalition_menu @1928-5)
+  rural_change_spd_display  (first seen in election_1928.coalition_menu @1928-5)
+  unemployed_change_spd_display  (first seen in election_1928.coalition_menu @1928-5)
+  catholics_change_spd_display  (first seen in election_1928.coalition_menu @1928-5)
+  workers_change_kpd_display  (first seen in election_1928.coalition_menu @1928-5)
+  old_middle_change_kpd_display  (first seen in election_1928.coalition_menu @1928-5)
+  new_middle_change_kpd_display  (first seen in election_1928.coalition_menu @1928-5)
+  rural_change_kpd_display  (first seen in election_1928.coalition_menu @1928-5)
+  unemployed_change_kpd_display  (first seen in election_1928.coalition_menu @1928-5)
+  catholics_change_kpd_display  (first seen in election_1928.coalition_menu @1928-5)
+  workers_change_z_display  (first seen in election_1928.coalition_menu @1928-5)
+  old_middle_change_z_display  (first seen in election_1928.coalition_menu @1928-5)
+  new_middle_change_z_display  (first seen in election_1928.coalition_menu @1928-5)
+  rural_change_z_display  (first seen in election_1928.coalition_menu @1928-5)
+  unemployed_change_z_display  (first seen in election_1928.coalition_menu @1928-5)
+  catholics_change_z_display  (first seen in election_1928.coalition_menu @1928-5)
+  workers_change_ddp_display  (first seen in election_1928.coalition_menu @1928-5)
+  old_middle_change_ddp_display  (first seen in election_1928.coalition_menu @1928-5)
+  new_middle_change_ddp_display  (first seen in election_1928.coalition_menu @1928-5)
+  rural_change_ddp_display  (first seen in election_1928.coalition_menu @1928-5)
+  unemployed_change_ddp_display  (first seen in election_1928.coalition_menu @1928-5)
+  catholics_change_ddp_display  (first seen in election_1928.coalition_menu @1928-5)
+  workers_change_dvp_display  (first seen in election_1928.coalition_menu @1928-5)
+  old_middle_change_dvp_display  (first seen in election_1928.coalition_menu @1928-5)
+  new_middle_change_dvp_display  (first seen in election_1928.coalition_menu @1928-5)
+  rural_change_dvp_display  (first seen in election_1928.coalition_menu @1928-5)
+  unemployed_change_dvp_display  (first seen in election_1928.coalition_menu @1928-5)
+  catholics_change_dvp_display  (first seen in election_1928.coalition_menu @1928-5)
+  workers_change_dnvp_display  (first seen in election_1928.coalition_menu @1928-5)
+
+--- "undefined"/"NaN" LEAKING INTO PLAYER-VISIBLE TEXT -- 0 ---
+
+RESULT: PROBLEMS FOUND (5 categories)

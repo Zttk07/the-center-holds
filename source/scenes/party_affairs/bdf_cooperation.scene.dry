@@ -2,7 +2,7 @@ title: Feminism Beyond Suffrage?
 new-page: true
 is-card: true
 tags: party_affairs
-view-if: ((womens_work >= 3 and family_law >= 2) and (womens_rights >= 8 or abortion_rights) and nationalism <= 40)
+view-if: player_party != 'z' and ((womens_work >= 3 and family_law >= 2) and (womens_rights >= 8 or abortion_rights) and nationalism <= 40)
 on-arrival: month_actions += 0
 card-image: img/frauen-freiheit-frieden.jpg
 face-image: img/frauen-freiheit-frieden.jpg

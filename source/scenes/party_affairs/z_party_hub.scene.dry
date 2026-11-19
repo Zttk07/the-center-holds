@@ -37,7 +37,7 @@ title: Faction Detail
 subtitle: View detailed breakdown of all faction strength, dissent, and status.
 choose-if: resources >= 0
 unavailable-subtitle: Not enough resources.
-go-to: z_faction_detail
+go-to: z_faction_detail_view
 
 @z_faction_event
 title: Faction Meeting
@@ -50,25 +50,25 @@ if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
     malus_penalty = Math.floor(Q.out_of_government_malus / 10);
 }
 if (roll < 0.3) {
-    Q.left_strength += Math.max(0, 2 - malus_penalty);
-    Q.left_dissent -= Math.max(0, 3 - malus_penalty);
-    Q.right_dissent += Math.max(0, 2 - malus_penalty);
+    Q.left_strength = Math.min(100, Q.left_strength + Math.max(0, 2 - malus_penalty));
+    Q.left_dissent = Math.max(0, Q.left_dissent - Math.max(0, 3 - malus_penalty));
+    Q.right_dissent = Math.min(100, Q.right_dissent + Math.max(0, 2 - malus_penalty));
     // Anti-Fascist faction only affected if available
     if (Q.anti_fascist_available) {
-        Q.anti_fascist_strength += Math.max(0, 1 - malus_penalty);
-        Q.anti_fascist_dissent -= Math.max(0, 2 - malus_penalty);
+        Q.anti_fascist_strength = Math.min(100, Q.anti_fascist_strength + Math.max(0, 1 - malus_penalty));
+        Q.anti_fascist_dissent = Math.max(0, Q.anti_fascist_dissent - Math.max(0, 2 - malus_penalty));
     }
     Q.z_faction_text = "The Left faction gains ground, arguing that only social reform can counter the Nazis. The Right grumbles.";
 } else if (roll < 0.6) {
-    Q.right_strength += Math.max(0, 2 - malus_penalty);
-    Q.right_dissent -= Math.max(0, 3 - malus_penalty);
-    Q.left_dissent += Math.max(0, 2 - malus_penalty);
+    Q.right_strength = Math.min(100, Q.right_strength + Math.max(0, 2 - malus_penalty));
+    Q.right_dissent = Math.max(0, Q.right_dissent - Math.max(0, 3 - malus_penalty));
+    Q.left_dissent = Math.min(100, Q.left_dissent + Math.max(0, 2 - malus_penalty));
     Q.z_faction_text = "The Right faction presses for a conservative course. The Left warns of alienating workers.";
 } else {
-    Q.center_strength += Math.max(0, 1 - malus_penalty);
-    Q.center_dissent -= Math.max(0, 2 - malus_penalty);
-    Q.christian_unity_strength += Math.max(0, 1 - malus_penalty);
-    Q.christian_unity_dissent -= Math.max(0, 2 - malus_penalty);
+    Q.center_strength = Math.min(100, Q.center_strength + Math.max(0, 1 - malus_penalty));
+    Q.center_dissent = Math.max(0, Q.center_dissent - Math.max(0, 2 - malus_penalty));
+    Q.christian_unity_strength = Math.min(100, Q.christian_unity_strength + Math.max(0, 1 - malus_penalty));
+    Q.christian_unity_dissent = Math.max(0, Q.christian_unity_dissent - Math.max(0, 2 - malus_penalty));
     Q.z_faction_text = "The Center holds, emphasizing Catholic unity above partisan divides. Christian Unity faction feels validated.";
 }
 if (malus_penalty > 0) {
@@ -77,6 +77,19 @@ if (malus_penalty > 0) {
 !}
 
 {! Q.z_faction_text !}
+
+- @z_party_hub: Return to Party Affairs
+
+@z_faction_detail_view
+title: Faction Detail
+new-page: true
+
+Left: [+ left_strength +] strength, [+ left_dissent +] dissent
+Center: [+ center_strength +] strength, [+ center_dissent +] dissent
+Right: [+ right_strength +] strength, [+ right_dissent +] dissent
+Christian Unity: [+ christian_unity_strength +] strength, [+ christian_unity_dissent +] dissent
+Anti-Fascist: [+ anti_fascist_strength +] strength, [+ anti_fascist_dissent +] dissent
+Barons: [+ barons_strength +] strength, [+ barons_dissent +] dissent
 
 - @z_party_hub: Return to Party Affairs
 
@@ -136,10 +149,10 @@ var malus_penalty = 0;
 if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
     malus_penalty = Math.floor(Q.out_of_government_malus / 10);
 }
-Q.center_strength += Math.max(0, 2 - malus_penalty);
-Q.center_dissent -= Math.max(0, 2 - malus_penalty);
-Q.left_dissent -= Math.max(0, 1 - malus_penalty);
-Q.right_dissent -= Math.max(0, 1 - malus_penalty);
+Q.center_strength = Math.min(100, Q.center_strength + Math.max(0, 2 - malus_penalty));
+Q.center_dissent = Math.max(0, Q.center_dissent - Math.max(0, 2 - malus_penalty));
+Q.left_dissent = Math.max(0, Q.left_dissent - Math.max(0, 1 - malus_penalty));
+Q.right_dissent = Math.max(0, Q.right_dissent - Math.max(0, 1 - malus_penalty));
 !}
 go-to: z_org_event
 
@@ -179,28 +192,28 @@ if (Q.z_in_government != 1 && Q.out_of_government_malus > 0) {
     malus_penalty = Math.floor(Q.out_of_government_malus / 10);
 }
 if (roll < 0.25) {
-    Q.left_strength += Math.max(0, 3 - malus_penalty);
+    Q.left_strength = Math.min(100, Q.left_strength + Math.max(0, 3 - malus_penalty));
     if (Q.anti_fascist_available) {
-        Q.anti_fascist_strength += Math.max(0, 2 - malus_penalty);
+        Q.anti_fascist_strength = Math.min(100, Q.anti_fascist_strength + Math.max(0, 2 - malus_penalty));
         Q.z_electoral_text = "Strategy leans social-democratic. Left and Anti-Fascist factions energized.";
     } else {
         Q.z_electoral_text = "Strategy leans social-democratic. Left faction energized. (Anti-Fascist faction locked)";
     }
 } else if (roll < 0.5) {
-    Q.center_strength += Math.max(0, 3 - malus_penalty);
-    Q.christian_unity_strength += Math.max(0, 2 - malus_penalty);
+    Q.center_strength = Math.min(100, Q.center_strength + Math.max(0, 3 - malus_penalty));
+    Q.christian_unity_strength = Math.min(100, Q.christian_unity_strength + Math.max(0, 2 - malus_penalty));
     Q.z_electoral_text = "Centrist Catholic platform chosen. Center and Christian Unity strengthened.";
 } else if (roll < 0.75) {
-    Q.right_strength += Math.max(0, 3 - malus_penalty);
-    Q.christian_unity_strength += Math.max(0, 1 - malus_penalty);
+    Q.right_strength = Math.min(100, Q.right_strength + Math.max(0, 3 - malus_penalty));
+    Q.christian_unity_strength = Math.min(100, Q.christian_unity_strength + Math.max(0, 1 - malus_penalty));
     Q.z_electoral_text = "Conservative-Catholic appeal selected. Right faction gains, Christian Unity modestly.";
 } else {
     if (Q.anti_fascist_available) {
-        Q.anti_fascist_strength += Math.max(0, 4 - malus_penalty);
-        Q.left_strength += Math.max(0, 1 - malus_penalty);
+        Q.anti_fascist_strength = Math.min(100, Q.anti_fascist_strength + Math.max(0, 4 - malus_penalty));
+        Q.left_strength = Math.min(100, Q.left_strength + Math.max(0, 1 - malus_penalty));
         Q.z_electoral_text = "Anti-fascist democratic front emphasized. Anti-Fascist faction surges."
     } else {
-        Q.left_strength += Math.max(0, 2 - malus_penalty);
+        Q.left_strength = Math.min(100, Q.left_strength + Math.max(0, 2 - malus_penalty));
         Q.z_electoral_text = "Anti-fascist platform considered but Anti-Fascist faction not yet unlocked. Left faction gains instead."
     }
 }

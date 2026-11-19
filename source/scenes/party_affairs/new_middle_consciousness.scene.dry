@@ -2,7 +2,7 @@ title: Class Consciousness of the New Middle Class
 new-page: true
 is-card: true
 tags: party_affairs
-view-if: (socialism >= 51 and (radio >= 1 or commercialized_media >= 1) and new_middle_spd_normalized >= 15)
+view-if: player_party != 'z' and (socialism >= 51 and (radio >= 1 or commercialized_media >= 1) and new_middle_spd_normalized >= 15)
 on-arrival: month_actions += 0
 card-image: img/new-middle-conscious.jpg
 face-image: img/new-middle-conscious.jpg

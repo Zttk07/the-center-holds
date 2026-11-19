@@ -1,6 +1,7 @@
 title: Campaigning (People's Party)
 
 # basically, we can campaign as part of the people's party...
+view-if: player_party != 'z'
 
 - @campaign_workers
 - @campaign_middle

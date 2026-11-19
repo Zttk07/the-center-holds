@@ -78,6 +78,16 @@ Q.anti_fascist_dissent = 5;
 Q.barons_strength = 0;
 Q.barons_dissent = 0;
 
+// SPD faction strength (fluid, shifts with ideological choices)
+Q.labor_strength = 10;
+Q.labor_dissent = 10;
+Q.reformist_strength = 10;
+Q.reformist_dissent = 10;
+Q.neorevisionist_strength = 0;
+Q.neorevisionist_dissent = 0;
+Q.social_patriot_strength = 0;
+Q.social_patriot_dissent = 0;
+
 // overall dissent (rigid, hard to reduce)
 Q.dissent = 0.05;
 Q.dissent_percent = 5;
@@ -185,6 +195,7 @@ Q.z_relation = 50;
 Q.kpd_relation = 25;
 Q.ddp_relation = 60;
 Q.dvp_relation = 35;
+Q.spd_relation = 50;
 // DNVP and NSDAP are invariably hostile
 Q.dnvp_relation = 5;
 Q.nsdap_relation = 0;
@@ -400,6 +411,33 @@ Q.rural_spd_old = 8;
 Q.unemployed_spd_old = 25;
 Q.catholics_spd_old = 20;
 
+Q.workers_nsdap_old = 0;
+Q.new_middle_nsdap_old = 4;
+Q.old_middle_nsdap_old = 9;
+Q.rural_nsdap_old = 3;
+Q.unemployed_nsdap_old = 13;
+Q.catholics_nsdap_old = 0;
+
+// Initialize _display and old_*_display variables for all class/party combinations
+// This prevents NaN on first election when calculating demographic changes
+// The election_algorithm calculates _display from raw demographics, so we pre-compute them here
+var classes = ['workers', 'old_middle', 'new_middle', 'rural', 'unemployed', 'catholics'];
+var parties = ['spd', 'kpd', 'z', 'ddp', 'dvp', 'dnvp', 'nsdap', 'other'];
+
+for (var c of classes) {
+    var class_votes = 0;
+    for (var party of parties) {
+        if (Q[c+'_'+party] < 0) {
+            Q[c+'_'+party] = 0;
+        }
+        class_votes += Q[c+'_'+party];
+    }
+    for (var party of parties) {
+        Q[c + '_' + party + '_display'] = Math.round(100*Q[c+'_'+party]/class_votes);
+        Q['old_' + c + '_' + party + '_display'] = Q[c + '_' + party + '_display'];
+    }
+}
+
 // Current Reichstag composition
 // % of Reichstag in Jan 1928
 // source: wikipedia
@@ -507,6 +545,15 @@ Q.old_sapd_r = 0;
 Q.sapd_r_prussia = 0;
 Q.old_sapd_r_prussia = 0;
 Q.sapd_votes = 0;
+
+// SRPD (Right SPD splinter) - initialized to 0, populated when formed
+Q.srpd_r = 0;
+Q.old_srpd_r = 0;
+Q.srpd_r_prussia = 0;
+Q.old_srpd_r_prussia = 0;
+Q.srpd_votes = 0;
+Q.srpd_formed = 0;
+Q.old_srpd_lippe_elections_vote = 0;
 
 Q.dnf_r = 0;
 Q.old_dnf_r = 0;
@@ -857,6 +904,8 @@ Q.peoples_party_timer = 0;
 Q.bruning_event_timer = 0;
 Q.stegerwald_transformation_timer = 0;
 Q.dsu_policy_timer = 0;
+Q.party_affairs_timer = 0;
+Q.advisor_timer = 0;
 
 // Zentrum faction split timers
 Q.z_left_split_timer = 0;
@@ -1360,6 +1409,16 @@ Q.right_dissent = 5;
 Q.christian_unity_dissent = 5;
 Q.anti_fascist_dissent = 2;
 Q.barons_dissent = 0;
+// SPD faction strength (fluid, shifts with ideological choices)
+Q.labor_strength = 15;
+Q.labor_dissent = 5;
+Q.reformist_strength = 10;
+Q.reformist_dissent = 10;
+Q.neorevisionist_strength = 0;
+Q.neorevisionist_dissent = 0;
+Q.social_patriot_strength = 0;
+Q.social_patriot_dissent = 0;
+
 Q.bvp_relations = 60;
 Q.bvp_integration = 0;
 Q.presidential_opinion = 70;
@@ -1404,6 +1463,16 @@ Q.right_dissent = 25;
 Q.christian_unity_dissent = 25;
 Q.anti_fascist_dissent = 25;
 Q.barons_dissent = 0;
+// SPD faction strength (fluid, shifts with ideological choices)
+Q.labor_strength = 5;
+Q.labor_dissent = 30;
+Q.reformist_strength = 5;
+Q.reformist_dissent = 25;
+Q.neorevisionist_strength = 0;
+Q.neorevisionist_dissent = 0;
+Q.social_patriot_strength = 0;
+Q.social_patriot_dissent = 0;
+
 Q.bvp_relations = 40;
 Q.bvp_integration = 0;
 Q.presidential_opinion = 40;
@@ -1450,6 +1519,16 @@ Q.right_dissent = 25;
 Q.christian_unity_dissent = 25;
 Q.anti_fascist_dissent = 25;
 Q.barons_dissent = 0;
+// SPD faction strength (fluid, shifts with ideological choices)
+Q.labor_strength = 5;
+Q.labor_dissent = 30;
+Q.reformist_strength = 5;
+Q.reformist_dissent = 25;
+Q.neorevisionist_strength = 0;
+Q.neorevisionist_dissent = 0;
+Q.social_patriot_strength = 0;
+Q.social_patriot_dissent = 0;
+
 Q.bvp_relations = 40;
 Q.bvp_integration = 0;
 Q.presidential_opinion = 40;
@@ -1497,6 +1576,16 @@ Q.right_dissent = 10;
 Q.christian_unity_dissent = 10;
 Q.anti_fascist_dissent = 5;
 Q.barons_dissent = 0;
+// SPD faction strength (fluid, shifts with ideological choices)
+Q.labor_strength = 10;
+Q.labor_dissent = 10;
+Q.reformist_strength = 10;
+Q.reformist_dissent = 10;
+Q.neorevisionist_strength = 0;
+Q.neorevisionist_dissent = 0;
+Q.social_patriot_strength = 0;
+Q.social_patriot_dissent = 0;
+
 Q.bvp_relations = 50;
 Q.bvp_integration = 0;
 Q.presidential_opinion = 60;
@@ -1542,6 +1631,16 @@ Q.right_dissent = 10;
 Q.christian_unity_dissent = 10;
 Q.anti_fascist_dissent = 5;
 Q.barons_dissent = 0;
+// SPD faction strength (fluid, shifts with ideological choices)
+Q.labor_strength = 10;
+Q.labor_dissent = 10;
+Q.reformist_strength = 10;
+Q.reformist_dissent = 10;
+Q.neorevisionist_strength = 0;
+Q.neorevisionist_dissent = 0;
+Q.social_patriot_strength = 0;
+Q.social_patriot_dissent = 0;
+
 Q.bvp_relations = 50;
 Q.bvp_integration = 0;
 Q.presidential_opinion = 60;

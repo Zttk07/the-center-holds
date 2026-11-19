@@ -1039,6 +1039,35 @@ if ((Q.month_actions >= 1 && !Q.rubicon) || (Q.month_actions >= 4 && Q.rubicon))
         }
     }
 
+    // === ZENTRUM MOD: Monthly coalition_type derivation ===
+    // Derive coalition_type from actual coalition flags (spec §3.1)
+    if (Q.player_party == 'z') {
+        if (Q.in_weimar_coalition) {
+            Q.coalition_type = 'weimarer';
+        } else if (Q.in_grand_coalition) {
+            Q.coalition_type = 'groko';
+        } else if (Q.in_right_coalition) {
+            Q.coalition_type = 'recht';
+        } else if (Q.in_center_right_coalition) {
+            Q.coalition_type = 'mittel_recht';
+        } else if (Q.spd_toleration && Q.chancellor_party == 'Z') {
+            Q.coalition_type = 'verfassungs';
+        } else if (Q.spd_toleration && Q.chancellor_party == 'SPD') {
+            Q.coalition_type = 'volksfront';
+        } else if (Q.chancellor_party == 'Z' && !Q.spd_toleration && !Q.in_weimar_coalition && !Q.in_grand_coalition && !Q.in_right_coalition && !Q.in_center_right_coalition) {
+            // Z-led minority or bourgeois cabinet
+            if (Q.dnvp_relation >= 40) {
+                Q.coalition_type = 'schwarz_braun';
+            } else if (Q.dvp_relation >= 40) {
+                Q.coalition_type = 'bourgeois';
+            } else {
+                Q.coalition_type = 'mittel';
+            }
+        } else {
+            Q.coalition_type = 'none';
+        }
+    }
+
     // === ZENTRUM MOD: Monthly Faction Strength Decay & Anti-Fascist Availability ===
     // Only applies when Zentrum is the player party
     if (Q.player_party == 'z') {

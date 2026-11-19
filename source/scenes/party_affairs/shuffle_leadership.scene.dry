@@ -2,7 +2,7 @@ title: Shuffle Leadership
 new-page: true
 is-card: true
 tags: party_affairs
-view-if: shuffle_leadership_timer = 0 and difficulty >= 0 and not started
+view-if: player_party != 'z' and shuffle_leadership_timer = 0 and difficulty >= 0 and not started
 on-arrival: month_activities += 1; shuffle_leadership_timer = 10;
 card-image: img/vorwarts_2.jpg
 go-to: rm_main
@@ -17,16 +17,14 @@ go-to: rm_main
 
 @rm_main
 title: Remove advisors.
-tags: center_advisor, left_advisor, reformist_advisor, labor_advisor, neorev_advisor, nonfactional_advisor 
+tags: center_advisor, left_advisor, reformist_advisor, labor_advisor, neorev_advisor, nonfactional_advisor
 on-arrival: {!
 Q.last_time_check = Q.time;
-if (Q.time > Q.last_time_check) {
-    Q.advisor_1 = [];
+Q.advisor_1 = [];
 
-    for (let key in Q) {
-        if (key.endsWith('_advisor') && Q[key] === 1) {
-            Q.advisor_1.push(key.replace('_advisor', ''));
-        }
+for (let key in Q) {
+    if (key.endsWith('_advisor') && Q[key] === 1) {
+        Q.advisor_1.push(key.replace('_advisor', ''));
     }
 }
 console.log(Q.advisor_1)
